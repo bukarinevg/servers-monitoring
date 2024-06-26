@@ -10,10 +10,10 @@ services:
       
   mysql:
     image: mysql:5.7
-    hostname: planner-hostname
+    hostname: monitoring-db
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=planner
+      - MYSQL_DATABASE=monitoring
       - MYSQL_USER=user
       - MYSQL_PASSWORD=user
     volumes:

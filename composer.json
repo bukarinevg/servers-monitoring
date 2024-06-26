@@ -5,7 +5,7 @@
     "license": "Apache License",
     "autoload": {
         "psr-4": {
-            "Evgbu\\ServersMonitoring\\": "src/"
+            "app\\": "src/"
         }
     },
     "authors": [

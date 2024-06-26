@@ -1,3 +1,13 @@
-<?php
+<?php 
+/**
+ * This entry point is responsible for loading the application.
+ */
 
-echo "Hello World!";
+require_once 'vendor/autoload.php';
+$config = require 'config/config.php';
+
+$app = new app\source\App($config);
+$app->run();
+
+
+
