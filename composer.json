@@ -1,0 +1,19 @@
+{
+    "name": "evgbu/servers-monitoring",
+    "description": "bukarinevgeni <bukarinevgeni@gmail.com>",
+    "type": "project",
+    "license": "Apache License",
+    "autoload": {
+        "psr-4": {
+            "Evgbu\\ServersMonitoring\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "bukarinevgeni",
+            "email": "bukarinevgeni@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
