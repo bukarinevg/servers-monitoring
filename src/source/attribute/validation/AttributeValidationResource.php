@@ -1,6 +1,8 @@
 <?php
 namespace app\source\attribute\validation;
 
+use app\source\attribute\AttributeHelper;
+
 /**
  * Class AttributeValidationResource
  * 
@@ -12,23 +14,34 @@ class AttributeValidationResource
      * This method validates the  modal properties for each attribute.
      * 
      * @param string $class
-     * @param string $propertyName
-     * @param mixed $value
+     * @param array $data
      * 
      * @return true|\Exception
      */
-    public static function validateProperty(string $class, string $propertyName , mixed $value): true|\Exception
+    public static function validateALLProperties(string $class, array $data): true|\Exception
     {
-        $reflector = new \ReflectionProperty($class, $propertyName);
-        $attributes = $reflector->getAttributes();
-        foreach ($attributes as $attribute) {
-            $attribute = $attribute->newInstance();
-            if (method_exists($attribute, 'validate')) {
-                if (!$attribute->validate($value)) {
-                    throw new \Exception("The value of the property $propertyName is not valid");
+        //get all fields with FieldAttribute
+        $fields = AttributeHelper::getFieldsWithAttribute($class, FieldAttribute::class);
+        foreach ($fields as $field) {
+            $attributes = AttributeHelper::getAttributesFromField($class, $field);               
+            if(
+                AttributeHelper::getAttributeFromField(
+                $class, $field, RequiredAttribute::class) && (!isset($data[$field]) || empty($data[$field])) ){
+                throw new \Exception("Field $field is not set");
+            }
+            else if(!isset($data[$field]) || empty($data[$field] )){
+                echo "Field $field is not required \n";
+                continue;
+            }
+
+            foreach ($attributes as $attribute) {
+                $attribute = $attribute->newInstance();
+                if (method_exists($attribute, 'validate')) {
+                    if (!$attribute->validate($data[$field])) {
+                        throw new \Exception("The value of the property $field is not valid");
+                    }
                 }
             }
-            
         }
         return true;
     }

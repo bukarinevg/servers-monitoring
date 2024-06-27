@@ -29,13 +29,23 @@ class UrlRouting  extends Url{
      */
     public function getController(): array {
         $url = $this->getPath();
+        if(strpos($url, '-') ){
+            $trimmedUrl = ltrim($url, '-');
+            $parts = explode('-', $trimmedUrl);
+            $parts = array_map(function($part) {
+                return ucfirst($part);
+            }, $parts);
+            $url = implode('', $parts);
+        }
+
         $url = explode('/', ltrim( $url, '/'));
 
+        
   
         if($url[0]){
             return [ 
                 'controller' => self::getControllerName($url[0]), 
-                'method'     => self::getMethodName ( isset($url[1]) ?? 'index') 
+                'method'     => self::getMethodName ( isset($url[1]) ? $url[1] : 'index') 
             ];
         }
         else{
@@ -54,14 +64,6 @@ class UrlRouting  extends Url{
      * @return string The controller name.
      */
     private function getControllerName($url = null): string {
-        if($url ){
-            $trimmedUrl = ltrim($url, '-');
-            $parts = explode('-', $trimmedUrl);
-            $parts = array_map(function($part) {
-                return ucfirst($part);
-            }, $parts);
-            $url = implode('', $parts);
-        }
         return self::CONTROLLER_NAMESPACE . ( $url ? ucfirst($url) : 'Default' ). 'Controller';
     }
 
@@ -72,6 +74,7 @@ class UrlRouting  extends Url{
      * @return string The method name.
      */
     private function getMethodName($url = null): string {
+        echo $url;
         return 'action' . ( $url ? ucfirst($url) : 'Index' );
     }
 }

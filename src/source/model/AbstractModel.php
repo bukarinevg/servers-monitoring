@@ -3,7 +3,8 @@ namespace app\source\model;
 
 use app\source\attribute\validation\AttributeValidationResource;
 use app\source\db\DataBase;
-use app\source\db\QueryBuilderTrait;
+use app\source\attribute\validation\FieldAttribute;
+use app\source\attribute\AttributeHelper;
 use app\source\http\RequestHandler;
 use Exception;
 
@@ -25,7 +26,7 @@ abstract class AbstractModel {
     /**
      * The fields for model.
      */
-    public array $fields;
+    public array $data = [];
 
 
     /**
@@ -79,18 +80,41 @@ abstract class AbstractModel {
      */
     public function load(RequestHandler $request): null |Exception{
 
-        $data = $request->getContent();
+        $this->data = $request->getContent();
 
-        foreach($this->fields as $field){
-            if(!isset($data[$field])){
-                throw new \Exception("Field $field is not set");
-            }
-            if(AttributeValidationResource::validateProperty($this::class ,  $field, $data[$field])) {
-                $this->$field = $data[$field];
-            }
+        AttributeValidationResource::validateALLProperties($this::class, $this->data);
 
+        foreach ($this->data as $key => $value) {
+            $this->$key = $value;
         }
+
+        echo 'Data is valid';
+
         return null;
     }
+
+    public function save(): bool {
+        $columns = [];
+        $values = [];
+        $fields= AttributeHelper::getFieldsWithAttribute($this::class, FieldAttribute::class);
+
+        foreach ($fields as $field) {            
+            if($field === 'id') continue;
+            if(array_key_exists($field, $this->data)){
+                $columns[] = $field;
+                $values[] = $this->$field;
+            }
+        }
+        if(empty($columns) || empty($values)) {
+            throw new Exception('No data to save');
+        }
+        print_r($columns);
+        print_r($values);
+
+        $this->insert($columns, $values);
+        return true;
+    }
+
+    
 }
 

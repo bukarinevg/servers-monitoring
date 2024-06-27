@@ -21,7 +21,7 @@ readonly class App
     public function run()
     {
         $this->setRequest(new RequestHandler());
-        $this->callController((new UrlRouting())->getController() );        
+        $this->callController( (new UrlRouting())->getController() );        
     }
 
     /**
@@ -31,6 +31,7 @@ readonly class App
      */
     public function callController(array $route) 
     {
+        print_r($route);
         try {
             $controller =  $route['controller'];
             $method = $route['method'];
