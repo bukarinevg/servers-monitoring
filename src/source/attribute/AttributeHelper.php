@@ -14,12 +14,11 @@ class AttributeHelper
      */
     static function getFieldsWithAttribute(string $class, string $attribute): array
     {
-        echo "Class: $class\n";echo "Attribute: $attribute\n";
-        
+        // echo "Class: $class\n";echo "Attribute: $attribute\n";
         $reflector = new \ReflectionClass($class);
         $properties = $reflector->getProperties();
-        
         $fields = [];
+        
         foreach ($properties as $property) {
             $reflector = new \ReflectionProperty($class, $property->getName());
             $attributes = $reflector->getAttributes();
@@ -29,7 +28,8 @@ class AttributeHelper
                     $fields[] = $property->getName();
                 }
             };
-        }   
+        } 
+        // print_r($fields);  
         return $fields;
     }
 

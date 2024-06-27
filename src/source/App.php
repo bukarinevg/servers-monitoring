@@ -2,12 +2,15 @@
 namespace app\source;
 
 use app\source\attribute\http\RouteValidationResource;
+use app\source\db\DataBase;
 use app\source\http\RequestHandler;
 use app\source\http\UrlRouting;
-
+use app\source\SingletonTrait;
 
 readonly class App
 {
+    use SingletonTrait;
+
     /**
      * @var mixed $request The request object.
      */
@@ -15,7 +18,9 @@ readonly class App
     
 
 
-    function __construct(#[\SensitiveParameter] private  array $config){}
+    public function __construct(#[\SensitiveParameter] private  array $config){
+        DataBase::getInstance($this->config['components']['db']);
+    }
 
 
     public function run()
@@ -35,24 +40,29 @@ readonly class App
         try {
             $controller =  $route['controller'];
             $method = $route['method'];
+            $param = $route['param'];
             
             if (!class_exists($controller)) {
                 throw new \Exception("Controller $controller does not exist");
             }
             $controllerInstance = new $controller($this);
-    
-            if (!method_exists($controllerInstance, $method)) {
-                throw new \Exception("Method $method does not exist in controller $controller");
-            }
-            elseif (!is_callable([$controllerInstance, $method])) {
+            
+            if (!is_callable([$controllerInstance, $method])) {
                 throw new \Exception("Method $method is not callable in controller $controller");
             }
+
             RouteValidationResource::validateRoute(
                 class: $controllerInstance::class, 
                 method: $method
             );
+
+            if($param){
+                $controllerInstance->$method($param);
+            }
+            else{
+                $controllerInstance->$method();
+            }
     
-            $controllerInstance->$method();
 
             
         } catch (\Exception $e) {

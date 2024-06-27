@@ -11,29 +11,26 @@ class WebServerModel extends \app\source\model\AbstractModel
 {
     public string $table = 'web_server';
 
-    #[FieldAttribute]
-    #[TypeAttribute(type: 'integer')]
-    public int $id;
 
     #[FieldAttribute]
     #[LengthAttribute(min: 5, max: 100)]
     #[TypeAttribute(type: 'string')]
     #[RequiredAttribute]
-    public string $name;
+    public $name;
 
     #[FieldAttribute]
     #[LengthAttribute(min: 1, max: 100)]
     #[TypeAttribute(type: 'string')]
     #[RequiredAttribute]
-    public string $ip_address;
+    public $ip_address;
 
     #[FieldAttribute]
     #[TypeAttribute(type: 'integer')]
-    public int $port;
+    public int|null $port;
 
     #[FieldAttribute]
     #[TypeAttribute(type: 'integer')]
-    public int $status;
+    public int|null $status;
 
 
 

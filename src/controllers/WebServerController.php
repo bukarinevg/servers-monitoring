@@ -6,16 +6,18 @@ use app\models\WebServerModel;
 
 class WebServerController extends \app\source\controller\AbstractController
 {
+
     /**
-     * WebServerController index
+     * WebServerController get
      *
-     * @return string
+     * @return void
      */
-    
-    #[RouteAttribute(path: '/', method: 'GET')]
-    public function actionIndex(): void
+    #[RouteAttribute(path: '/get', method: 'GET')]
+    public function actionGet($id): void
     {
-        echo 'WebServerController index';
+        $webServerModel = WebServerModel::find($id);
+        echo $webServerModel->toJson();
+
         return;
     }
 
@@ -25,7 +27,7 @@ class WebServerController extends \app\source\controller\AbstractController
      * @return void
      */
     #[RouteAttribute(path: '/post', method: 'POST')]
-    public function actionAdd(): void
+    public function actionPost(): void
     {
         $webServerModel = new WebServerModel();
         $webServerModel->load($this->app->getRequest());
@@ -33,4 +35,22 @@ class WebServerController extends \app\source\controller\AbstractController
         $webServerModel->save();
         return;
     }
+
+    /**
+     * WebServerController put
+     *
+     * @return void
+     */
+    #[RouteAttribute(path: '/put', method: 'PUT')]
+    public function actionPut(int $id): void
+    {
+        $webServerModel = WebServerModel::find($id);
+        $webServerModel->load($this->app->getRequest());
+        $webServerModel->save();
+        return;
+    }
+
+
+
+
 }
