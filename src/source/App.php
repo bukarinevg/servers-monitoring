@@ -1,7 +1,7 @@
 <?php
 namespace app\source;
 
-
+use app\source\attribute\http\RouteValidationResource;
 use app\source\http\RequestHandler;
 use app\source\http\UrlRouting;
 
@@ -43,8 +43,17 @@ readonly class App
             if (!method_exists($controllerInstance, $method)) {
                 throw new \Exception("Method $method does not exist in controller $controller");
             }
+            elseif (!is_callable([$controllerInstance, $method])) {
+                throw new \Exception("Method $method is not callable in controller $controller");
+            }
+            RouteValidationResource::validateRoute(
+                class: $controllerInstance::class, 
+                method: $method
+            );
     
             $controllerInstance->$method();
+
+            
         } catch (\Exception $e) {
             echo 'Error: ' . $e->getMessage();
         }

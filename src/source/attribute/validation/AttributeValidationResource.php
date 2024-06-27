@@ -1,8 +1,6 @@
 <?php
 namespace app\source\attribute\validation;
 
-use Attribute;
-
 /**
  * Class AttributeValidationResource
  * 
@@ -10,6 +8,15 @@ use Attribute;
  */
 class AttributeValidationResource
 {
+    /**
+     * This method validates the  modal properties for each attribute.
+     * 
+     * @param string $class
+     * @param string $propertyName
+     * @param mixed $value
+     * 
+     * @return true|\Exception
+     */
     public static function validateProperty(string $class, string $propertyName , mixed $value): true|\Exception
     {
         $reflector = new \ReflectionProperty($class, $propertyName);
@@ -24,12 +31,5 @@ class AttributeValidationResource
             
         }
         return true;
-        // foreach ($attributes as $attribute) {
-        //     if ($attribute->getName() === Attribute::class) {
-        //         return $attribute->newInstance();
-        //     }
-        // }
-
-
     }
 }
