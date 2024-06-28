@@ -81,4 +81,11 @@ class RequestHandler {
 
         return $this;
     }
+
+    /**
+     * Get the value of requestMethod
+     */
+    public function getRequestMethod(): string {
+        return $this->request->getMethod();
+    }
 }

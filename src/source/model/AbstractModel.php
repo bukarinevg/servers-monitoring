@@ -8,6 +8,9 @@ use app\source\attribute\validation\TypeAttribute;
 use app\source\attribute\AttributeHelper;
 use app\source\http\RequestHandler;
 use Exception;
+use League\Container\Exception\NotFoundException;
+use PDOException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 /**
  * This is an abstract class that serves as the base for all models.
@@ -61,12 +64,12 @@ abstract class AbstractModel {
      *
      * @param array $columns The columns to insert data into.
      * @param array $values The values to be inserted.
-     * @return bool|\Exception Returns true if the data is valid and inserted, otherwise throws an exception.
+     * @return bool Returns true if the data is valid and inserted, otherwise throws an exception.
      */
-    public function insert(array $columns , array $values ): bool|\Exception {
+    public function insert(array $columns , array $values ): int {
         $requestDictionary = array_combine($columns, $values);
-        $this->db->insert($this->table , $columns, $requestDictionary);
-        return true;    
+        $id = $this->db->insert($this->table , $columns, $requestDictionary);
+        return $id;    
     }
 
     /**
@@ -76,14 +79,21 @@ abstract class AbstractModel {
      * @param array $columns The columns to update data in.
      * @param array $values The values to be updated.
      * @param array $where The where clause for the update.
-     * @return bool|\Exception Returns true if the data is valid and updated, otherwise throws an exception.
+     * @return bool Returns true if the data is valid and updated, otherwise throws an exception.
      */
-    public function update(array $columns , array $values , array $where): bool|Exception {
+    public function update(array $columns , array $values , array $where): bool{
         $requestDictionary = array_combine($columns, $values);
         $this->db->update($this->table , $columns, $requestDictionary, $where);
         return true;
     }
 
+    public function delete(): bool {
+        if($this->id) {
+            $this->db->delete($this->table, ['id' => $this->id]);
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Find a record by its ID.
@@ -95,7 +105,7 @@ abstract class AbstractModel {
         $model = new static();
         $result = $model->db->select($model->table, ['*'], ['id' => $id]);
         if(! $result){
-            throw new Exception('Record not found');
+            throw new NotFoundException('Record not found');
         }   
 
         foreach ($result[0] as $key => $value) {
@@ -112,12 +122,12 @@ abstract class AbstractModel {
      * @param RequestHandler $request
      * @return void
      */
-    public function load(RequestHandler $request): null |Exception{
-        if($request == null) {
-            throw new Exception('Request is null');
-        }
-
+    public function load(RequestHandler $request): null {
         $this->data = $request->getContent();
+
+        if(! $this->data) {
+            throw new BadRequestException('Request is empty');
+        }
 
         AttributeValidationResource::validateALLProperties($this::class, $this->data);
 
@@ -125,12 +135,12 @@ abstract class AbstractModel {
             $this->$key = $value;
         }
 
-        echo 'Data is valid';
+        // echo 'Data is valid';
 
         return null;
     }
 
-    public function save(): bool {
+    public function save(): void  {
         $columns = [];
         $values = [];
 
@@ -144,25 +154,30 @@ abstract class AbstractModel {
             $columns[] = $field;
             $values[] = $this->$field ?? null;
         }
-        
-
 
         if(empty($columns) || empty($values)) {
-            throw new Exception('No data to save');
+            throw new BadRequestException('No data to save');
         }
 
         if($this->id) {
-            echo 'updating';
+            
             $this->update($columns, $values, ['id' => $this->id]);
-            return true;
         }
         else {
-            echo 'inserting';
-            $this->insert($columns, $values);
-            return true;
+            $id = $this->insert($columns, $values);
+            $model =  self::find($id);
+            
+            foreach ($this->fields as $field) {
+                $this->$field = $model->$field;
+            }
         }
     }
 
+    /**
+     * Convert the model object to a JSON string.
+     *
+     * @return string The JSON string.
+     */
     public function toJson(): string {
         $data = [];
 

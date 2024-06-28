@@ -1,11 +1,14 @@
 <?php
 namespace app\source\attribute\http;
 
+use BadMethodCallException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+
 class RouteValidationResource{
     public static function validateRoute(
         string $class,
         string $method
-    ): bool | \Exception
+    ): bool | BadMethodCallException
     {
         $reflector = new \ReflectionMethod($class, $method);
         $attributes = $reflector->getAttributes();
@@ -13,7 +16,7 @@ class RouteValidationResource{
             $attribute = $attribute->newInstance();
             if (method_exists($attribute, 'validate')) {
                 if (!$attribute->validate()) {
-                    throw new \Exception("The applied rest api method is not valid");
+                    throw new BadMethodCallException("The applied rest api method is not valid");
                 }
             }
         }

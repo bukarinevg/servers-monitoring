@@ -1,5 +1,5 @@
 <?php
-namespace app\controllers;
+namespace app\controllers\api\v1;
 
 use app\source\attribute\http\RouteAttribute;
 use app\models\WebServerModel;
@@ -15,7 +15,6 @@ class WebServerController extends \app\source\controller\AbstractController
     #[RouteAttribute(path: '/get', method: 'GET')]
     public function actionGet($id): void
     {
-        header('Content-Type: application/json; charset=utf-8');
         $webServerModel = WebServerModel::find($id);
         echo $webServerModel->toJson();
         return;
@@ -27,12 +26,13 @@ class WebServerController extends \app\source\controller\AbstractController
      * @return void
      */
     #[RouteAttribute(path: '/post', method: 'POST')]
-    public function actionPost(): void
+    public function actionPost(): int 
     {
         $webServerModel = new WebServerModel();
         $webServerModel->load($this->app->getRequest());
         $webServerModel->save();
-        return;
+        echo $webServerModel->toJson();
+        return $webServerModel->id;
     }
 
     /**
@@ -46,6 +46,20 @@ class WebServerController extends \app\source\controller\AbstractController
         $webServerModel = WebServerModel::find($id);
         $webServerModel->load($this->app->getRequest());
         $webServerModel->save();
+        echo $webServerModel->toJson();
+        return;
+    }
+
+    /**
+     * WebServerController delete
+     *
+     * @return void
+     */
+    #[RouteAttribute(path: '/delete', method: 'DELETE')]
+    public function actionDelete(int $id): void
+    {
+        $webServerModel = WebServerModel::find($id);
+        $webServerModel->delete();
         return;
     }
 }

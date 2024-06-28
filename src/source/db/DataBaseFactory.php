@@ -26,7 +26,7 @@ class DataBaseFactory{
                 return new $class(...array_values($config));
             }
         }
-        throw new \Exception('No database connection class found for the given driver.');
+        throw new \PDOException('No database connection class found for the given driver.');
     }
 
     /**

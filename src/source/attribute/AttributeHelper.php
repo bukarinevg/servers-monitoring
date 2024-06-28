@@ -41,12 +41,12 @@ class AttributeHelper
      * @param string $attribute
      * @return \ReflectionAttribute|null
      */
-    static function getAttributeFromField(string $class, string $field, string $attribute): bool{
+    static function getAttributeFromField(string $class, string $field, string $attribute): bool | \ReflectionAttribute{
         $reflector = new \ReflectionProperty($class, $field);
         $attributes = $reflector->getAttributes();
         foreach ($attributes as $attr) {
             if ($attr->getName() == $attribute) {
-                return true;
+                return $attr;
             }
         }
         return false;
@@ -65,4 +65,20 @@ class AttributeHelper
         return $attributes;
     }
 
+    static function getAttributtesFromMethod(string $class, string $method): array{
+        $reflector = new \ReflectionMethod($class, $method);
+        $attributes = $reflector->getAttributes();
+        return $attributes;
+    }
+
+    static function getAttributeFromMethod(string $class, string $method, string $attribute){
+        $reflector = new \ReflectionMethod($class, $method);
+        $attributes = $reflector->getAttributes();
+        foreach ($attributes as $attr) {
+            if ($attr->getName() == $attribute) {
+                return $attr;
+            }
+        }
+        return false;
+    }
 }
