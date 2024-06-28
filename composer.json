@@ -23,6 +23,7 @@
         "symfony/http-foundation": "^6.3",
         "vishnubob/wait-for-it": "dev-master",
         "peppeocchi/php-cron-scheduler": "dev-master",
-        "haydenpierce/class-finder": "dev-master"
+        "haydenpierce/class-finder": "dev-master",
+        "guzzlehttp/guzzle": "^7.0"
     }
 }

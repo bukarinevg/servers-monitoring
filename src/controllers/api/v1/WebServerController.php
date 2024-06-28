@@ -8,6 +8,19 @@ class WebServerController extends \app\source\controller\AbstractController
 {
 
     /**
+     * WebServerController getAll
+     *
+     * @return void
+     */
+    #[RouteAttribute(path: '/get-all', method: 'GET')]
+    public function actionGetAll(): void
+    {
+        $webServerModel = WebServerModel::findAll();
+        echo json_encode($webServerModel);
+        return;
+    }
+
+    /**
      * WebServerController get
      *
      * @return void
