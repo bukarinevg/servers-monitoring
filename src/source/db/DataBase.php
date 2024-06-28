@@ -42,7 +42,7 @@ class DataBase  {
     /**
      * Establishes a connection to the database based on the provided configuration.
      */
-    private function connect(): bool|\Exception {
+    private function connect(): bool {
         $dbArguments = [
             'host' => $this->config['host'],
             'driver' => $this->config['driver'],
@@ -60,8 +60,8 @@ class DataBase  {
      *
      * @param DBConnectionInterface $DBConnectionInterface The database connection object.
      */
-    private function setDataBaseConnection(DBConnectionInterface $connection): PDO|\Exception {
-        return $this->db = $connection->getConnection() ??  throw new \Exception("Error connecting to the database.");
+    private function setDataBaseConnection(DBConnectionInterface $connection): PDO {
+        return $this->db = $connection->getConnection() ??  throw new \PDOException("Error connecting to the database.");
         
     }
 
@@ -88,12 +88,14 @@ class DataBase  {
      * @param string $table The name of the table.
      * @param array $columns The columns to insert data into.
      * @param array $values The values to insert.
-     * @return bool|\Exception Returns true if the data is valid and inserted, otherwise throws an exception.
+     * @return bool Returns true if the data is valid and inserted, otherwise throws an PDOException.
      */
-    public function insert(string $table, array $columns, array $requestDictionary): bool|\Exception{
+    public function insert(string $table, array $columns, array $requestDictionary): int{
         $query = $this->traitInsert($table , $columns);
         $query = $this->db->prepare($query);
-        return $query->execute($requestDictionary) ? true : throw new \Exception("Error inserting data into the database.");
+        $res = $query->execute($requestDictionary) ? true : throw new \PDOException("Error inserting data into the database.");
+        return $this->db->lastInsertId();
+
     } 
 
     /**
@@ -103,12 +105,12 @@ class DataBase  {
      * @param array $columns The columns to update.
      * @param array $values The values to update.
      * @param array $where The where clause for the update.
-     * @return bool|\Exception Returns true if the data is valid and updated, otherwise throws an exception.
+     * @return bool Returns true if the data is valid and updated, otherwise throws an PDOException.
      */
-    public function update(string $table, array $columns, array $requestDictionary, array $where): bool|\Exception{
+    public function update(string $table, array $columns, array $requestDictionary, array $where): bool{
         $query = $this->traitUpdate($table , $columns, $where);
         $query = $this->db->prepare($query);
-        return $query->execute($requestDictionary) ? true : throw new \Exception("Error updating data in the database.");
+        return $query->execute($requestDictionary) ? true : throw new \PDOException("Error updating data in the database.");
     }
 
 
@@ -117,12 +119,12 @@ class DataBase  {
      *
      * @param string $table The name of the table.
      * @param array $condition The condition for deletion.
-     * @return bool|\Exception Returns true if the data is valid and deleted, otherwise throws an exception.
+     * @return bool Returns true if the data is valid and deleted, otherwise throws an PDOException.
      */
-    public function delete(string $table, array $condition): bool|\Exception{
+    public function delete(string $table, array $condition): bool{
         $query = $this->traitDelete($table , $condition);
         $query = $this->db->prepare($query);
-        return $query->execute() ? true : throw new \Exception("Error deleting data from the database.");
+        return $query->execute() ? true : throw new \PDOException("Error deleting data from the database.");
     }
 
     

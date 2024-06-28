@@ -2,6 +2,7 @@
 namespace app\source\http;
 
 use app\source\http\Url;
+use League\Container\Exception\NotFoundException;
 
 /**
  * Class UrlRouting
@@ -27,7 +28,7 @@ class UrlRouting  extends Url{
      *
      * @return array An array containing the controller and method.
      */
-    public function getController(): array {
+    public function getControllerFullAddress(): array {
         $url = $this->getPath();
         
         if(strpos($url, '-') ){
@@ -44,10 +45,10 @@ class UrlRouting  extends Url{
 
         $length = count($url);
         if($length == 0){
-            throw new \Exception('No controller found');
+            throw new NotFoundException('No controller found');
         }
         elseif($length == 1){
-           throw new \Exception('No method found');
+           throw new NotFoundException('No method found');
         }
 
         $path = '';
@@ -78,19 +79,19 @@ class UrlRouting  extends Url{
         $path = '';
 
         if($length < 3){
-            throw new \Exception('Controller or method not found');
+            throw new NotFoundException('Wrong URL format');
         }
 
         for($i = 0; $i < $length -3 ; $i++){
             $path .= ucfirst($url[$i]) . '\\';  
         }
-
-
+        
         $controller =ucfirst($url[$length - 3]);
         $controller = $this->getControllerName($path.$controller);
         $method = ucfirst($url[$length - 2]);
         $method =  $this->getMethodName($method);
         $param = $url[$length - 1];
+
 
         if(class_exists($controller) && method_exists($controller, $method)){
             $reflector = new \ReflectionMethod($controller, $method);
@@ -103,9 +104,12 @@ class UrlRouting  extends Url{
                     'param'     => $param
                 ];
             }
+            else{
+                throw new NotFoundException('Parameter not found');
+            }
         }
 
-        throw new \Exception('Controller or method not found');
+        throw new NotFoundException('Controller or method not found');
 
 
 

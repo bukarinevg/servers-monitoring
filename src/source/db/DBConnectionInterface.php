@@ -18,8 +18,8 @@ interface DBConnectionInterface{
     /**
      * Establishes a connection to the database.
      *
-     * @return  PDO|PDOException The database connection object.
+     * @return  PDO The database connection object.
      */
-    public function getConnection() : PDO | PDOException;
+    public function getConnection() : PDO ;
 }
 ?>

@@ -21,10 +21,10 @@ class MSSQLConnection extends AbstractDBConnection implements DBConnectionInterf
     /**
      * Establishes a connection to the database.
      *
-     * @return PDO|null The PDO connection object if successful, null otherwise.
+     * @return PDO The PDO connection object if successful, null otherwise.
      */
     #[\Override]
-    public function getConnection():  PDO | PDOException
+    public function getConnection():  PDO
     {
         $this->connection = null;
         try {

@@ -2,6 +2,7 @@
 namespace app\source\attribute\validation;
 
 use app\source\attribute\AttributeHelper;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 /**
  * Class AttributeValidationResource
@@ -27,7 +28,7 @@ class AttributeValidationResource
             if(
                 AttributeHelper::getAttributeFromField(
                 $class, $field, RequiredAttribute::class) && (!isset($data[$field]) || empty($data[$field])) ){
-                throw new \Exception("Field $field is not set");
+                throw new BadRequestException("Field $field is not set");
             }
             else if(!isset($data[$field]) || empty($data[$field] )){
                 continue;
@@ -37,7 +38,7 @@ class AttributeValidationResource
                 $attribute = $attribute->newInstance();
                 if (method_exists($attribute, 'validate')) {
                     if (!$attribute->validate($data[$field])) {
-                        throw new \Exception("The value of the property $field is not valid");
+                        throw new BadRequestException("The value of the property $field is not valid");
                     }
                 }
             }
