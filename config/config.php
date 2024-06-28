@@ -3,7 +3,7 @@ return [
     "components" =>[
         'db' => [
             'host' => 'monitoring-db',
-            'db_name' => 'planner',
+            'db_name' => 'monitoring',
             'username' => 'user',
             'password' => 'user',
             'driver' => 'mysql'	

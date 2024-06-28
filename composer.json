@@ -15,5 +15,14 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "robmorgan/phinx": "^0.15.4",
+        "symfony/yaml": "^6.3",
+        "psr/http-message": "^2.0",
+        "psr/http-server-handler": "^1.0",
+        "symfony/http-foundation": "^6.3",
+        "vishnubob/wait-for-it": "dev-master",
+        "peppeocchi/php-cron-scheduler": "dev-master",
+        "haydenpierce/class-finder": "dev-master"
+    }
 }
