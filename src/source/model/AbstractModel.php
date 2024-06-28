@@ -84,6 +84,13 @@ abstract class AbstractModel {
         return true;
     }
 
+    public function delete(): bool|Exception {
+        if($this->id) {
+            $this->db->delete($this->table, ['id' => $this->id]);
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Find a record by its ID.

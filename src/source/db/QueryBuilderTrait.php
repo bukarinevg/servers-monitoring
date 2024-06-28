@@ -39,8 +39,6 @@ trait QueryBuilderTrait {
     public function select(string $table, array  $columns, array $condition = []): string {
         
         $conditionString = $this->buildCondition($condition);
-        $conditionString =  $conditionString ? 
-        ' WHERE ' . $conditionString : '';
 
         $columnStr = implode(', ', $columns);
         $columnStr = rtrim($columnStr, ', ');
@@ -63,7 +61,6 @@ trait QueryBuilderTrait {
      */
     public function update(string $table, array $columns, array $condition = []): string {
         $conditionString = $this->buildCondition($condition);
-        $conditionString = $conditionString ? ' WHERE ' . $conditionString : '';
         $setParts = [];
         foreach ($columns as $column => $value) {
             $setParts[] = $value . ' = :' . $value;
@@ -84,9 +81,10 @@ trait QueryBuilderTrait {
      * @return string The SQL query.
      */
     public function delete(string $table, array $condition = []): string {
-        $conditionString = $this->buildCondition($condition);
-        
-        return 'DELETE FROM ' . $table .  $conditionString ? ' WHERE ' . $conditionString : '';
+        $conditionString = $this->buildCondition($condition);        
+        return 
+            'DELETE FROM ' . $table .  
+            $conditionString;
         // Implement the delete method here
     }
 
@@ -101,6 +99,8 @@ trait QueryBuilderTrait {
         foreach($condition as $key => $value){
             $conditionString = $key . ' = ' . $value . ' AND ';
         }
-        return rtrim($conditionString, ' AND ');	
+        $conditionString=  rtrim($conditionString, ' AND ');	
+        $conditionString =  $conditionString ? ' WHERE ' . $conditionString : '';
+        return $conditionString;
     }
 }

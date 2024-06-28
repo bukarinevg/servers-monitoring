@@ -6,7 +6,6 @@ use app\source\db\connectors\PostgreSQLConnection;
 use app\source\db\connectors\MSSQLConnection;
 use app\source\db\DataBaseFactory;
 use app\source\SingletonTrait;
-use app\source\TestTrait;
 use PDO;
 
 /**
@@ -21,7 +20,7 @@ class DataBase  {
         select as traitSelect;
 		insert as traitInsert;
         update as traitUpdate;
-        
+        delete as traitDelete;
 	}
 
     use SingletonTrait;
@@ -108,13 +107,23 @@ class DataBase  {
      */
     public function update(string $table, array $columns, array $requestDictionary, array $where): bool|\Exception{
         $query = $this->traitUpdate($table , $columns, $where);
-        echo $query;
-        print_r($requestDictionary);
         $query = $this->db->prepare($query);
         return $query->execute($requestDictionary) ? true : throw new \Exception("Error updating data in the database.");
     }
 
 
+    /**
+     * Deletes data from the specified table based on the given condition.
+     *
+     * @param string $table The name of the table.
+     * @param array $condition The condition for deletion.
+     * @return bool|\Exception Returns true if the data is valid and deleted, otherwise throws an exception.
+     */
+    public function delete(string $table, array $condition): bool|\Exception{
+        $query = $this->traitDelete($table , $condition);
+        $query = $this->db->prepare($query);
+        return $query->execute() ? true : throw new \Exception("Error deleting data from the database.");
+    }
 
     
 

@@ -48,4 +48,17 @@ class WebServerController extends \app\source\controller\AbstractController
         $webServerModel->save();
         return;
     }
+
+    /**
+     * WebServerController delete
+     *
+     * @return void
+     */
+    #[RouteAttribute(path: '/delete', method: 'DELETE')]
+    public function actionDelete(int $id): void
+    {
+        $webServerModel = WebServerModel::find($id);
+        $webServerModel->delete();
+        return;
+    }
 }
