@@ -16,7 +16,11 @@ class WebServerController extends \app\source\controller\AbstractController
     public function actionGetAll(): void
     {
         $webServerModel = WebServerModel::findAll();
-        echo json_encode($webServerModel);
+        $output = [];
+        foreach ($webServerModel as $model) {
+            $output[] = $model->toArray();
+        }
+        echo json_encode($output);
         return;
     }
 

@@ -21,11 +21,11 @@ final class CreateWebServerTable extends AbstractMigration
     {
         $this->table('web_server')
             ->addColumn('name', 'string', ['limit' => 100])
-            ->addColumn('ip_address', 'string', ['limit' => 100])
+            ->addColumn('path', 'string', ['limit' => 100])
             ->addColumn('port', 'integer')
             ->addColumn('status', 'integer')
-            ->addColumn('created_at', 'integer', ['default' => time()])
-            ->addColumn('updated_at', 'integer', ['default' => time()])
+            ->addColumn('created_at', 'integer')
+            ->addColumn('updated_at', 'integer')
             ->create();
     }
 }

@@ -228,6 +228,21 @@ abstract class AbstractModel {
         
         return json_encode($data);
     }
+
+    /**
+     * Convert the model object to an array.
+     *
+     * @return array The array.
+     */
+    public function toArray(): array {
+        $data = [];
+
+        foreach ($this->fields as $property) {
+            $data[$property] = $this->{$property};
+        }
+
+        return $data;
+    }
        
 
     

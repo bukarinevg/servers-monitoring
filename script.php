@@ -18,9 +18,9 @@ $client = new Client([
 foreach ($webServers as $server) {
     if($server instanceof WebServerModel) {
         try {
-            echo "Checking server: $server->id " . $server->ip_address . "\n";
+            echo "Checking server: $server->id " . $server->path . "\n";
             $startTime = microtime(true);
-            $response = $client->get($server->ip_address);
+            $response = $client->get($server->path);
             $endTime = microtime(true);
 
             $statusCode = $response->getStatusCode();
