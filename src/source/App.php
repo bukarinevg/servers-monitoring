@@ -36,7 +36,7 @@ readonly class App
      */
     public function callController(array $route) 
     {
-        print_r($route);
+        // print_r($route);
         try {
             $controller =  $route['controller'];
             $method = $route['method'];

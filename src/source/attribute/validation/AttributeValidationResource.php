@@ -30,7 +30,6 @@ class AttributeValidationResource
                 throw new \Exception("Field $field is not set");
             }
             else if(!isset($data[$field]) || empty($data[$field] )){
-                echo "Field $field is not required \n";
                 continue;
             }
 

@@ -134,14 +134,18 @@ abstract class AbstractModel {
         $columns = [];
         $values = [];
 
+        if($this->id) {
+            $this->updated_at = time();
+        } else {
+            $this->created_at = time();
+        }
+
         foreach ($this->fields as $field) {  
             $columns[] = $field;
             $values[] = $this->$field ?? null;
         }
         
-        echo 'Columns and values';
-        print_r($columns);
-        print_r($values);
+
 
         if(empty($columns) || empty($values)) {
             throw new Exception('No data to save');
@@ -163,10 +167,10 @@ abstract class AbstractModel {
         $data = [];
 
         foreach ($this->fields as $property) {
-            $data[$property->getName()] = $this->{$property->getName()};
+            $data[$property] = $this->{$property};
         }
         
-        return json_encode($this->data);
+        return json_encode($data);
     }
        
 

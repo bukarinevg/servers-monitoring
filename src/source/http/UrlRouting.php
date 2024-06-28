@@ -64,8 +64,8 @@ class UrlRouting  extends Url{
         if(class_exists($controller) && method_exists($controller, $method)){
             $reflector = new \ReflectionMethod($controller, $method);
             $params = $reflector->getParameters();
-            echo 'contollers exists and method exists no params required'; 
             if(count($params) == 0){
+                // echo 'contollers exists and method exists no params required'; 
                 return [ 
                     'controller' => $controller, 
                     'method'     => $method,
@@ -74,11 +74,17 @@ class UrlRouting  extends Url{
             }
             
         }
+
         $path = '';
+
+        if($length < 3){
+            throw new \Exception('Controller or method not found');
+        }
 
         for($i = 0; $i < $length -3 ; $i++){
             $path .= ucfirst($url[$i]) . '\\';  
         }
+
 
         $controller =ucfirst($url[$length - 3]);
         $controller = $this->getControllerName($path.$controller);
@@ -89,8 +95,8 @@ class UrlRouting  extends Url{
         if(class_exists($controller) && method_exists($controller, $method)){
             $reflector = new \ReflectionMethod($controller, $method);
             $params = $reflector->getParameters();
-            echo 'contollers exists and method exists params required'; 
             if(count($params) == 1){
+                // echo 'contollers exists and method exists params required'; 
                 return [ 
                     'controller' => $controller, 
                     'method'     => $method,
@@ -98,6 +104,8 @@ class UrlRouting  extends Url{
                 ];
             }
         }
+
+        throw new \Exception('Controller or method not found');
 
 
 

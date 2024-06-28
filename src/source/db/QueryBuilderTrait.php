@@ -17,11 +17,15 @@ trait QueryBuilderTrait {
      */
     public function insert(string $table, array $columns): string {
         // Implement the insert method here
-        $columns = implode(', ', $columns);
+        $colummsName = implode(', ', $columns);
+        $columnsValues = array_map(function($column){
+            return ':' . $column;
+        }, $columns);
+        $columnsValues = implode(', ', $columnsValues);
         return 
         'INSERT INTO ' . $table . 
-        '(' . $columns . ')'.
-        'VALUES (:' .  $columns . ')';
+        '(' . $colummsName . ')'.
+        'VALUES (' .  $columnsValues . ')';
     }
 
     /**
@@ -33,15 +37,14 @@ trait QueryBuilderTrait {
      * @return string The SQL query.
      */
     public function select(string $table, array  $columns, array $condition = []): string {
+        
         $conditionString = $this->buildCondition($condition);
         $conditionString =  $conditionString ? 
         ' WHERE ' . $conditionString : '';
+
         $columnStr = implode(', ', $columns);
         $columnStr = rtrim($columnStr, ', ');
 
-        echo  'SELECT ' .  $columnStr . 
-        ' FROM ' . $table . 
-        $conditionString;
 
         return 
             'SELECT ' .  $columnStr . 

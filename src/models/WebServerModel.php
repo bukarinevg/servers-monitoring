@@ -16,13 +16,13 @@ class WebServerModel extends \app\source\model\AbstractModel
     #[LengthAttribute(min: 5, max: 100)]
     #[TypeAttribute(type: 'string')]
     #[RequiredAttribute]
-    public $name;
+    public string $name;
 
     #[FieldAttribute]
     #[LengthAttribute(min: 1, max: 100)]
     #[TypeAttribute(type: 'string')]
     #[RequiredAttribute]
-    public $ip_address;
+    public string $ip_address;
 
     #[FieldAttribute]
     #[TypeAttribute(type: 'integer')]

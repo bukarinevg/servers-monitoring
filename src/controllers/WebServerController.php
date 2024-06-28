@@ -15,9 +15,9 @@ class WebServerController extends \app\source\controller\AbstractController
     #[RouteAttribute(path: '/get', method: 'GET')]
     public function actionGet($id): void
     {
+        header('Content-Type: application/json; charset=utf-8');
         $webServerModel = WebServerModel::find($id);
         echo $webServerModel->toJson();
-
         return;
     }
 
@@ -31,7 +31,6 @@ class WebServerController extends \app\source\controller\AbstractController
     {
         $webServerModel = new WebServerModel();
         $webServerModel->load($this->app->getRequest());
-        $webServerModel->port = 80;
         $webServerModel->save();
         return;
     }
@@ -49,8 +48,4 @@ class WebServerController extends \app\source\controller\AbstractController
         $webServerModel->save();
         return;
     }
-
-
-
-
 }
