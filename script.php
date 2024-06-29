@@ -9,6 +9,7 @@ use app\source\db\DataBase;
 use app\enums\ServerStatusEnum;
 use app\enums\ServerMessageEnum;
 use app\enums\ServerChecksAmountEnum;
+use app\source\services\Email;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
@@ -23,8 +24,10 @@ use GuzzleHttp\Psr7\Message;
  * This class checks the status of the web servers.
  */
 class ServerChecker {
-    
-
+    /**
+     * @var Email $email The Email object.
+     */
+    private Email $email;
     /**
      * @var Client $client The Guzzle client object.
      */
@@ -36,13 +39,19 @@ class ServerChecker {
     private array $webServers;
 
     /**
+     * @var array $users The array of users.
+     */
+    private $users = [];
+    /**
      * ServerChecker constructor.
      * @param Client $client The Guzzle client object.
      * @param array $webServers The array of web servers.
      */
-    public function __construct(Client $client, array $webServers) {
+    public function __construct(Client $client, array $webServers,  array $users = []) {
         $this->client = $client;
         $this->webServers = $webServers;
+        $this->email = Email::getInstance();
+        $this->users = $users;
     }
 
     /**
@@ -133,6 +142,7 @@ class ServerChecker {
             $work->status_code = $statusCode;
             $work->message = substr($message, 0, 255);
             $work->save();
+            $time = date('H:i:s d-m-Y', $work->created_at);
 
             $server = WebServerModel::find($server_id);
             if($status == $server->status && $server->count == ServerChecksAmountEnum::getValue($status)){
@@ -148,6 +158,7 @@ class ServerChecker {
                 $server->count++;
                 if($server->count === ServerChecksAmountEnum::STATUS_FAILURE->value) {
                     $server->status_message = ServerMessageEnum::MESSAGE_FAILURE->value;
+                    $this->notifyUsers("Server($server->name) is down ", "The time is $time. The server($server->name), url - $server->path is down. (Status code: $statusCode)");
                 }
             }
             elseif($status ==  ServerStatusEnum::STATUS_SUCCESS->value) {
@@ -161,14 +172,21 @@ class ServerChecker {
         }
         return ;
     }
+
+    public function notifyUsers($subject, $message) : void {
+        foreach ($this->users as $user) {
+            $this->email->sendEmail($user, $subject, $message);
+        }
+    }
 }
 
 DataBase::getInstance($config['components']['db']);
+Email::getInstance($config['components']['email']);
 
 $client = new Client(['timeout' => 60, 'max_redirects' => true]);
 $servers = WebServerModel::findAll();
 
-$checker = new ServerChecker($client, $servers);
+$checker = new ServerChecker($client, $servers, $config['admins'] ?? []);
 $checker->checkServers();
 
 

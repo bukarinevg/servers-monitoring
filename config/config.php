@@ -7,6 +7,17 @@ return [
             'username' => 'user',
             'password' => 'user',
             'driver' => 'mysql'	
-        ]
-    ]
+        ],
+        'email' => [
+            'host' => 'smtp.gmail.com',
+            'port' => 587,
+            'username' => 'bukarinevgeni@gmail.com',
+            'password' => 'snno thio lmcd uqdh',
+        ],    
+
+    ],
+    'admins' => [
+        'bukarinevgeni@gmail.com',
+        
+    ]      
 ];

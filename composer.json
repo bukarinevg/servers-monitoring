@@ -24,6 +24,7 @@
         "vishnubob/wait-for-it": "dev-master",
         "peppeocchi/php-cron-scheduler": "dev-master",
         "haydenpierce/class-finder": "dev-master",
-        "guzzlehttp/guzzle": "^7.0"
+        "guzzlehttp/guzzle": "^7.0",
+        "phpmailer/phpmailer": "dev-master"
     }
 }
