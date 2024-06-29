@@ -1,7 +1,7 @@
 <?php
 namespace app\source\http;
 
-class Error{
+class ResponseError{
 
     public static function setResponse($error, $message){
         header("HTTP/1.0 $error");

@@ -5,7 +5,7 @@ use app\source\attribute\http\RouteValidationResource;
 use app\source\db\DataBase;
 use app\source\http\RequestHandler;
 use app\source\http\UrlRouting;
-use app\source\http\Error;
+use app\source\http\ResponseError;
 use app\source\SingletonTrait;
 use BadMethodCallException;
 use Exception;
@@ -69,7 +69,7 @@ readonly class App
                     http_response_code(204);
                     break;
                 default:
-                    Error::setResponse('405 Method Not Allowed', 'Method not allowed');
+                    ResponseError::setResponse('405 Method Not Allowed', 'Method not allowed');
                     break;
             }
 
@@ -77,21 +77,21 @@ readonly class App
             
     
         } catch (NotFoundException $th) {
-            Error::setResponse('404 Not Found', $th->getMessage());
+            ResponseError::setResponse('404 Not Found', $th->getMessage());
         }
         catch (BadMethodCallException $th) {
-            Error::setResponse('405 Method Not Allowed', $th->getMessage());
+            ResponseError::setResponse('405 Method Not Allowed', $th->getMessage());
         }
         catch(PDOException $th){
-            Error::setResponse('500 Internal Server Error', $th->getMessage());
+            ResponseError::setResponse('500 Internal Server ResponseError', $th->getMessage());
             exit();
         }
         catch(BadRequestException $th){
-            Error::setResponse('400 Bad Request', $th->getMessage());
+            ResponseError::setResponse('400 Bad Request', $th->getMessage());
             exit();
         }
         catch(\Throwable $th){
-            Error::setResponse('500 Internal Server Error', $th->getMessage());
+            ResponseError::setResponse('500 Internal Server ResponseError', $th->getMessage());
             exit();
         }
         finally{
