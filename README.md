@@ -39,7 +39,7 @@
 
 ## Usage
 
-1. Load the postman collection from /postman folder.
+1. Load the postman collection from `postman/` folder.
 2. Run the collection to test the endpoints.
 3. To run the monitoring script  run the following command:
 ```bash
