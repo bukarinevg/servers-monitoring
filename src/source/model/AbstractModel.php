@@ -57,6 +57,28 @@ abstract class AbstractModel {
         $this->fields = AttributeHelper::getFieldsWithAttribute($this::class, FieldAttribute::class); 
     }
 
+    /** 
+     * Magic method to set the value of a property.
+     * 
+     * @param string $name The name of the property.
+     * @param mixed $value The value of the property.
+     */
+    public function __set(string $name, mixed $value)
+    {
+        $this->fields[$name] = $value;
+    }
+
+    /**
+     * Magic method to get the value of a property.
+     * 
+     * @param string $name The name of the property.
+     * @return mixed The value of the property.
+     */
+    public function __get($name)
+    {
+        return $this->fields[$name] ?? null;
+    }
+
 
     /**
      * Insert a new record into the database table.
@@ -101,7 +123,7 @@ abstract class AbstractModel {
      * @param int $id The ID of the record to find.
      * @return AbstractModel The model object.
      */
-    public static function find(int $id): AbstractModel {
+    public static function find(int $id): self {
         $model = new static();
         $result = $model->db->select($model->table, ['*'], ['id' => $id]);
         if(! $result){
@@ -113,6 +135,25 @@ abstract class AbstractModel {
         }
 
         return $model ;
+    }
+
+    /**
+     * Find all records in the database table.
+     *
+     * @return array The array of model objects.
+     */
+    public static function findAll(): array {
+        $model = new static();
+        $result = $model->db->select($model->table, ['*']);
+        $models = [];
+        foreach ($result as $row) {
+            $model = new static();
+            foreach ($row as $key => $value) {
+                $model->$key = $value;
+            }
+            $models[] = $model;
+        }
+        return $models;
     }
 
     /**
@@ -155,10 +196,6 @@ abstract class AbstractModel {
             $values[] = $this->$field ?? null;
         }
 
-        if(empty($columns) || empty($values)) {
-            throw new BadRequestException('No data to save');
-        }
-
         if($this->id) {
             
             $this->update($columns, $values, ['id' => $this->id]);
@@ -178,14 +215,42 @@ abstract class AbstractModel {
      *
      * @return string The JSON string.
      */
-    public function toJson(): string {
+    public function toJson(array $attributes=[] ): string {
         $data = [];
+        if($attributes) {
+            foreach ($attributes as $attribute) {
+                $data[$attribute] = $this->{$attribute};
+            }
+        }
+        else {
+            foreach ($this->fields as $property) {
+                $data[$property] = $this->{$property};
+            }
+        }
+        
+        return json_encode($data);
+    }
+
+    /**
+     * Convert the model object to an array.
+     *
+     * @return array The array.
+     */
+    public function toArray(array $attributes = []): array {
+        $data = [];
+        if($attributes) {
+            foreach ($attributes as $attribute) {
+                $data[$attribute] = $this->{$attribute};
+            }
+        }
+        else {
 
         foreach ($this->fields as $property) {
             $data[$property] = $this->{$property};
         }
-        
-        return json_encode($data);
+    }
+
+        return $data;
     }
        
 

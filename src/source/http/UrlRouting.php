@@ -62,7 +62,7 @@ class UrlRouting  extends Url{
         $method = ucfirst($url[$length - 1]);
         $method =  $this->getMethodName($method);
 
-        if(class_exists($controller) && method_exists($controller, $method)){
+        if($this->checkController($controller, $method)){
             $reflector = new \ReflectionMethod($controller, $method);
             $params = $reflector->getParameters();
             if(count($params) == 0){
@@ -93,7 +93,7 @@ class UrlRouting  extends Url{
         $param = $url[$length - 1];
 
 
-        if(class_exists($controller) && method_exists($controller, $method)){
+        if($this->checkController($controller, $method)){
             $reflector = new \ReflectionMethod($controller, $method);
             $params = $reflector->getParameters();
             if(count($params) == 1){

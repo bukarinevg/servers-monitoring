@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class CreateWebServerTable extends AbstractMigration
+final class AddColumnsToWebServerWork extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,13 +19,10 @@ final class CreateWebServerTable extends AbstractMigration
      */
     public function change(): void
     {
-        $this->table('web_server')
-            ->addColumn('name', 'string', ['limit' => 100])
-            ->addColumn('ip_address', 'string', ['limit' => 100])
-            ->addColumn('port', 'integer')
-            ->addColumn('status', 'integer')
-            ->addColumn('created_at', 'integer', ['default' => time()])
-            ->addColumn('updated_at', 'integer', ['default' => time()])
-            ->create();
+        $table = $this->table('web_server_work');
+        $table
+            ->addColumn('status_code', 'integer')
+            ->addColumn('message', 'string')
+            ->update();
     }
 }
