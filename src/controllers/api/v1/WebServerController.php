@@ -12,10 +12,11 @@ class WebServerController extends \app\source\controller\AbstractController
     /**
      * WebServerController get
      *
+     * @param int $id
      * @return void
      */
     #[RouteAttribute(path: '/get', method: 'GET')]
-    public function actionGet($id): void
+    public function actionGet(int $id): void
     {
         $webServerModel = WebServerModel::find($id);
         $webServerWorks = WebServerWorkModel::findBy(['web_server_id' => $id]);
@@ -58,11 +59,12 @@ class WebServerController extends \app\source\controller\AbstractController
 
     /**
      * WebServerController getHistory
-     *
+     * 
+     * @param int $id
      * @return void
      */
     #[RouteAttribute(path: '/get-history', method: 'GET')]
-    public function actionGetHistory($id): void
+    public function actionGetHistory(int $id): void
     {
         $webServerWorks = WebServerWorkModel::findBy(['web_server_id' => $id]);
         $output = [];
@@ -93,6 +95,7 @@ class WebServerController extends \app\source\controller\AbstractController
     /**
      * WebServerController put
      *
+     * @param int $id
      * @return void
      */
     #[RouteAttribute(path: '/put', method: 'PUT')]
@@ -108,6 +111,7 @@ class WebServerController extends \app\source\controller\AbstractController
     /**
      * WebServerController delete
      *
+     * @param int $id
      * @return void
      */
     #[RouteAttribute(path: '/delete', method: 'DELETE')]
