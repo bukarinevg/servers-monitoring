@@ -7,11 +7,24 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Throwable;
 
+/**
+ * Class Email
+ * 
+ * This class is responsible for sending emails.
+ */
 class Email
 {
     use SingletonTrait;
+    /**
+     * @var PHPMailer $mail The PHPMailer object.
+     */
     private PHPMailer $mail;
 
+    /**
+     * Email constructor.
+     * 
+     * @param array $config The configuration array.
+     */
     public function __construct(array $config)
     {
         $this->mail = new PHPMailer(true);
@@ -23,6 +36,15 @@ class Email
         $this->mail->Password = $config['password'];
     }
 
+    /**
+     * Sends an email.
+     *
+     * @param string $to The recipient of the email.
+     * @param string $subject The subject of the email.
+     * @param string $content The content of the email.
+     * @return bool Returns true if the email was sent successfully, false otherwise.
+     * @throws Exception
+     */
     public function sendEmail(string $to, string $subject, string $content): bool
     {
         try {
