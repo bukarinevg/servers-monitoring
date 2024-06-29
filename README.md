@@ -29,7 +29,7 @@
 ## Installation
 
 1. Clone the repository.
-2. Run the following command to build the docker image and start the containers:
+2. Run the following command to build the docker image and start the containers(`http://localhost:8080/`):
 ```bash 
     docker-compose up --build
 ```
@@ -37,12 +37,13 @@
 ```bash
     composer install
 ```
-4. Run the following command to create the tables and run the migrations:
+4. Run the following command to create the tables and run the migrations (inside the container):
 ```bash
     vendor/bin/phinx migrate -e development
 ```
 
 ## Usage
+You can check all data in the database using phpmyadmin on `http://localhost:8888/` with username `user` and password `user`.
 
 1. Load the postman collection from `postman/` folder.
 2. Run the collection to test the endpoints.
@@ -56,6 +57,8 @@
 
 - `config/` - This directory contains configuration file.
 - `db/` - This directory contains migrations.
+- `db-dump/` - This directory contains the database dump file.
+- `postman/` - This directory contains the postman collection.
 - `docker-images/` - This directory contains Dockerfile images.
 - `src/` - This directory contains the main application code.
   - `controllers/` - This directory contains the controller classes performing route paths.
