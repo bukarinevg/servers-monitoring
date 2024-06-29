@@ -45,6 +45,7 @@
 ```bash
     php script.php
 ```
+4. Add new users to email notifications in the `config/config.php` file.
 
 ## Project Structure
 
