@@ -3,6 +3,7 @@ namespace app\source\http;
 
 use app\source\http\Url;
 use League\Container\Exception\NotFoundException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 /**
  * Class UrlRouting
@@ -92,6 +93,9 @@ class UrlRouting  extends Url{
         $method =  $this->getMethodName($method);
         $param = $url[$length - 1];
 
+        if(!is_numeric($param)){
+            throw new BadRequestException('Parameter should be a number');
+        }
 
         if($this->checkController($controller, $method)){
             $reflector = new \ReflectionMethod($controller, $method);

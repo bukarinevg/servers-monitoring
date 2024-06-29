@@ -3,9 +3,39 @@ namespace app\controllers\api\v1;
 
 use app\source\attribute\http\RouteAttribute;
 use app\models\WebServerModel;
+use app\models\WebServerWorkModel;
 
 class WebServerController extends \app\source\controller\AbstractController
 {
+
+
+    /**
+     * WebServerController get
+     *
+     * @return void
+     */
+    #[RouteAttribute(path: '/get', method: 'GET')]
+    public function actionGet($id): void
+    {
+        $webServerModel = WebServerModel::find($id);
+        $webServerWorks = WebServerWorkModel::findBy(['web_server_id' => $id]);
+        
+        $response = [
+            'web_server' => $webServerModel->toArray(
+                ['name', 'path', 'port', 'status_message', 'created_at', 'updated_at']
+            ),
+            'web_server_works' => []
+        ];
+        $webServerWorks = array_reverse($webServerWorks);
+        foreach ($webServerWorks as $key => $webServerWork) {
+            if($key > 9) break;
+            $response['web_server_works'][] = $webServerWork->toArray(
+                ['status', 'status_code', 'message', 'created_at', ]
+            );
+        }
+        echo json_encode($response);
+        return;
+    }
 
     /**
      * WebServerController getAll
@@ -18,22 +48,30 @@ class WebServerController extends \app\source\controller\AbstractController
         $webServerModel = WebServerModel::findAll();
         $output = [];
         foreach ($webServerModel as $model) {
-            $output[] = $model->toArray();
+            $output[] = $model->toArray(
+                ['name', 'path', 'port', 'status_message', 'created_at', 'updated_at']
+            );
         }
         echo json_encode($output);
         return;
     }
 
     /**
-     * WebServerController get
+     * WebServerController getHistory
      *
      * @return void
      */
-    #[RouteAttribute(path: '/get', method: 'GET')]
-    public function actionGet($id): void
+    #[RouteAttribute(path: '/get-history', method: 'GET')]
+    public function actionGetHistory($id): void
     {
-        $webServerModel = WebServerModel::find($id);
-        echo $webServerModel->toJson();
+        $webServerWorks = WebServerWorkModel::findBy(['web_server_id' => $id]);
+        $output = [];
+        foreach ($webServerWorks as $webServerWork) {
+            $output[] = $webServerWork->toArray(
+                ['status', 'status_code', 'message', 'created_at']
+            );
+        }
+        echo json_encode($output);
         return;
     }
 

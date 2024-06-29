@@ -94,7 +94,6 @@ class ServerChecker {
     private function handleFailure(Throwable $e, int $server_id) : array {
         $statusCode= 500;
         $message = '';
-
         if ($e instanceof ConnectException) {
             $statusCode = 504;
             $message = "Gateway Timeout.";

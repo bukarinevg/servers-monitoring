@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b1795c52-928a-404f-8080-c6087930b401",
+		"_postman_id": "e095fa7e-7fc1-4378-8379-c74d87eb6841",
 		"name": "Web Server Monitoring",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "31412589"
@@ -138,12 +138,12 @@
 			"response": []
 		},
 		{
-			"name": "get element with :id=1",
+			"name": "get history of checks (invalid param)",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/web-server/get/1",
+					"raw": "http://localhost:8080/api/v1/web-server/get/ads",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -154,6 +154,30 @@
 						"v1",
 						"web-server",
 						"get",
+						"ads"
+					]
+				},
+				"description": "Get element with id =1, if it doesn't exist gives u an error 404 as method below"
+			},
+			"response": []
+		},
+		{
+			"name": "get history of checks (:id=1)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/web-server/getHistory/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"web-server",
+						"getHistory",
 						"1"
 					]
 				},
@@ -186,7 +210,31 @@
 			"response": []
 		},
 		{
-			"name": "edit request",
+			"name": "get element with :id=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/web-server/get/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"web-server",
+						"get",
+						"1"
+					]
+				},
+				"description": "Get element with id =1, if it doesn't exist gives u an error 404 as method below"
+			},
+			"response": []
+		},
+		{
+			"name": "update request",
 			"request": {
 				"method": "PUT",
 				"header": [],

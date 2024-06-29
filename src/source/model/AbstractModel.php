@@ -157,6 +157,26 @@ abstract class AbstractModel {
     }
 
     /**
+     * Find records by a condition.
+     *
+     * @param array $condition The condition to find records by.
+     * @return array The array of model objects.
+     */
+    public static function findBy(array $condition): array {
+        $model = new static();
+        $result = $model->db->select($model->table, ['*'], $condition);
+        $models = [];
+        foreach ($result as $row) {
+            $model = new static();
+            foreach ($row as $key => $value) {
+                $model->$key = $value;
+            }
+            $models[] = $model;
+        }
+        return $models;
+    }
+
+    /**
      * Load the data from the request object.
      * Validates the data and sets the properties of the model.
      *
@@ -216,6 +236,22 @@ abstract class AbstractModel {
      * @return string The JSON string.
      */
     public function toJson(array $attributes=[] ): string {
+        $data = $this->getDataFromModel($attributes);
+        return json_encode($data);
+    }
+
+    /**
+     * Convert the model object to an array.
+     *
+     * @return array The array.
+     */
+    public function toArray(array $attributes = []): array {
+        $data = $this->getDataFromModel($attributes);
+        return $data;
+    }
+       
+    private function getDataFromModel(array $attributes = []): array{
+          
         $data = [];
         if($attributes) {
             foreach ($attributes as $attribute) {
@@ -227,32 +263,12 @@ abstract class AbstractModel {
                 $data[$property] = $this->{$property};
             }
         }
-        
-        return json_encode($data);
-    }
-
-    /**
-     * Convert the model object to an array.
-     *
-     * @return array The array.
-     */
-    public function toArray(array $attributes = []): array {
-        $data = [];
-        if($attributes) {
-            foreach ($attributes as $attribute) {
-                $data[$attribute] = $this->{$attribute};
-            }
-        }
-        else {
-
-        foreach ($this->fields as $property) {
-            $data[$property] = $this->{$property};
-        }
-    }
-
+        if(isset($data['created_at']))
+            $data['created_at'] = date('H:i:s d-m-Y', $data['created_at']);
+        if(isset($data['updated_at']))
+            $data['updated_at'] = date('H:i:s d-m-Y', $data['updated_at']);
         return $data;
     }
-       
 
     
 }
