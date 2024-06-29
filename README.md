@@ -1,7 +1,6 @@
 # servers-monitoring
  Web Servers Monitoring system
 
-
 ## Introduction
 - System for monitoring HTTP web servers 
 
@@ -10,6 +9,7 @@
 - implemented PHP8 features as attributes, enums, types definition, etc.
 - Handling api methods
 - Handling errors according to the HTTP status codes and not appropiate requests
+- CRON job for monitoring the servers runs every minute
 - Asynchronous requests to the servers
 - Email notifications for the server status changes 
 
