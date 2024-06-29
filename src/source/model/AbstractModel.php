@@ -196,10 +196,6 @@ abstract class AbstractModel {
             $values[] = $this->$field ?? null;
         }
 
-        if(empty($columns) || empty($values)) {
-            throw new BadRequestException('No data to save');
-        }
-
         if($this->id) {
             
             $this->update($columns, $values, ['id' => $this->id]);
@@ -219,11 +215,17 @@ abstract class AbstractModel {
      *
      * @return string The JSON string.
      */
-    public function toJson(): string {
+    public function toJson(array $attributes=[] ): string {
         $data = [];
-
-        foreach ($this->fields as $property) {
-            $data[$property] = $this->{$property};
+        if($attributes) {
+            foreach ($attributes as $attribute) {
+                $data[$attribute] = $this->{$attribute};
+            }
+        }
+        else {
+            foreach ($this->fields as $property) {
+                $data[$property] = $this->{$property};
+            }
         }
         
         return json_encode($data);
@@ -234,12 +236,19 @@ abstract class AbstractModel {
      *
      * @return array The array.
      */
-    public function toArray(): array {
+    public function toArray(array $attributes = []): array {
         $data = [];
+        if($attributes) {
+            foreach ($attributes as $attribute) {
+                $data[$attribute] = $this->{$attribute};
+            }
+        }
+        else {
 
         foreach ($this->fields as $property) {
             $data[$property] = $this->{$property};
         }
+    }
 
         return $data;
     }

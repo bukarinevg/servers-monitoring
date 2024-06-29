@@ -7,13 +7,12 @@ use app\source\attribute\validation\FieldAttribute;
 use app\source\attribute\validation\TypeAttribute;
 use app\source\attribute\validation\RequiredAttribute;
 
-class WebServerModel extends \app\source\model\AbstractModel
+class WebServerWorkModel extends \app\source\model\AbstractModel
 {
-    public string $table = 'web_server';
+    public string $table = 'web_server_work';
 
     #[FieldAttribute]
     #[TypeAttribute(type: 'integer')]
-    #[RequiredAttribute]
     public int $web_server_id;
 
     #[FieldAttribute]
@@ -22,6 +21,14 @@ class WebServerModel extends \app\source\model\AbstractModel
     #[FieldAttribute]
     #[TypeAttribute(type: 'integer')]
     public int|null $status;
+
+    #[FieldAttribute]
+    #[TypeAttribute(type: 'integer')]
+    public int|null $status_code;
+
+    #[FieldAttribute]
+    #[TypeAttribute(type: 'string')]
+    public string|null $message;
 
 
 }

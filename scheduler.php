@@ -7,9 +7,9 @@ require_once 'vendor/autoload.php';
 use GO\Scheduler;
 
 
-$scheduler = new Scheduler();
-$scheduler->php('/var/www/html/script.php')->everyMinute();
-$scheduler->run();
+// $scheduler = new Scheduler();
+// $scheduler->php('/var/www/html/script.php')->everyMinute();
+// $scheduler->run();
 
 
 // $scheduler = new Scheduler();

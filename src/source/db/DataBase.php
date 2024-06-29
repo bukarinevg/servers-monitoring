@@ -65,8 +65,6 @@ class DataBase  {
         
     }
 
-
-
     /**
      * Selects data from the specified table based on the given columns and condition.
      *

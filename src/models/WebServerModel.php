@@ -13,7 +13,7 @@ class WebServerModel extends \app\source\model\AbstractModel
 
 
     #[FieldAttribute]
-    #[LengthAttribute(min: 5, max: 100)]
+    #[LengthAttribute(min: 1, max: 100)]
     #[TypeAttribute(type: 'string')]
     #[RequiredAttribute]
     public string $name;
@@ -32,8 +32,18 @@ class WebServerModel extends \app\source\model\AbstractModel
     #[TypeAttribute(type: 'integer')]
     public int|null $status;
 
+    #[FieldAttribute]
+    #[TypeAttribute(type: 'integer')]
+    public int|null $count;
 
+    #[FieldAttribute]
+    #[TypeAttribute(type: 'string')]
+    public string|null $status_message;
 
+    
+
+    
+    
     
 } 
 
