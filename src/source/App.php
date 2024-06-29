@@ -5,6 +5,7 @@ use app\source\attribute\http\RouteValidationResource;
 use app\source\db\DataBase;
 use app\source\http\RequestHandler;
 use app\source\http\UrlRouting;
+use app\source\http\Error;
 use app\source\SingletonTrait;
 use BadMethodCallException;
 use Exception;

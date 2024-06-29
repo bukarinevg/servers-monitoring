@@ -1,5 +1,5 @@
 <?php
-namespace app\source;
+namespace app\source\http;
 
 class Error{
 

@@ -6,7 +6,10 @@
 
 ## Features
 - MVC architecture
-- implemented PHP8 features as attributes, enums, types definition, etc.
+- implemented PHP8 features as attributes, enums, types definition, etc.:
+    - Attributes: for validation request data and filtering methods of api requests
+    - Enums: for defining the constants and dictionaries data
+- Implemented PSR-4 autoloading
 - Handling api methods
 - Handling errors according to the HTTP status codes and not appropiate requests
 - API response in JSON format with required status codes and location headers for post requests
@@ -53,12 +56,19 @@
 
 - `config/` - This directory contains configuration file.
 - `db/` - This directory contains migrations.
-- `php-apache/` - This directory contains Dockerfile for Apache.
+- `docker-images/` - This directory contains Dockerfile images.
 - `src/` - This directory contains the main application code.
   - `controllers/` - This directory contains the controller classes performing route paths.
   - `enums/` - This directory contains the enums classes (dictonaries data).
   - `models/` - This directory contains the model classes.
   - `source/` - Base code of application.
+    - `attribute/` - This directory contains the attributes.
+    - `controller/` - This directory contains the base controller class.
+    - `model/` - This directory contains the base model class.
+     `db/` - This directory contains DataBase settings Classes.
+        - `connectors/` - This directory contains DBConnectionInterface connectors Classes.
+    - `http/` - This directory contains Request Handler Classes.
+    - `services/` - This directory contains the services classes.
 
 
 ## DataBase Schema
