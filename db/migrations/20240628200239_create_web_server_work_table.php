@@ -21,7 +21,7 @@ final class CreateWebServerWorkTable extends AbstractMigration
     {
         $this->table('web_server_work')
             ->addColumn('web_server_id', 'integer', ['null' => false, 'signed' => false])
-            ->addForeignKey('web_server_id', 'web_server', 'id', ['delete' => 'RESTRICT', 'update' => 'RESTRICT'])
+            ->addForeignKey('web_server_id', 'web_server', 'id', ['delete' => 'CASCADE', 'update' => 'RESTRICT'])
             ->addColumn('workload', 'integer')
             ->addColumn('status', 'integer')
             ->addColumn('created_at', 'integer')
