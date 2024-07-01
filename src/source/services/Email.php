@@ -54,7 +54,7 @@ class Email
             $this->mail->Subject = $subject;
             $this->mail->Body = $content;
             $this->mail->send();
-
+            $this->mail->clearAddresses();
             return true;
         }
         catch (Throwable $e) {
