@@ -10,8 +10,15 @@ RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf &
 
 
 RUN apt-get update && \
-    apt-get -y install tzdata cron unzip p7zip-full libzip-dev && \
+    apt-get -y install tzdata cron unzip p7zip-full libzip-dev  libssh2-1-dev && \
     docker-php-ext-install zip
+
+RUN pecl install ssh2-1.3.1 && \
+    docker-php-ext-enable ssh2
+
+RUN apt-get update && \
+    apt-get -y install openssh-client && \
+    echo "Host *\n    StrictHostKeyChecking no\n    UserKnownHostsFile=/dev/null" >> /etc/ssh/ssh_config
 
 RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone && \

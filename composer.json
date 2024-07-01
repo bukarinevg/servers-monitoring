@@ -25,6 +25,7 @@
         "peppeocchi/php-cron-scheduler": "dev-master",
         "haydenpierce/class-finder": "dev-master",
         "guzzlehttp/guzzle": "^7.0",
-        "phpmailer/phpmailer": "dev-master"
+        "phpmailer/phpmailer": "dev-master",
+        "phpseclib/phpseclib": "~3.0"
     }
 }

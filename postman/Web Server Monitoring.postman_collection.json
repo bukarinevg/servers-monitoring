@@ -1,19 +1,19 @@
 {
 	"info": {
-		"_postman_id": "e095fa7e-7fc1-4378-8379-c74d87eb6841",
+		"_postman_id": "2d3cc8d3-3df8-46bf-aee7-f09acd48115a",
 		"name": "Web Server Monitoring",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "31412589"
 	},
 	"item": [
 		{
-			"name": "create first element",
+			"name": "create first http element",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"check mine portfolio\",\r\n    \"path\" : \"https://evgbukar.com/\"\r\n}",
+					"raw": "{\r\n    \"name\" : \"check mine portfolio\",\r\n    \"path\" : \"https://evgbukar.com/\",\r\n    \"type\" : 0\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -39,13 +39,13 @@
 			"response": []
 		},
 		{
-			"name": "create second element",
+			"name": "create second http element",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"check mine nodejs server\",\r\n    \"path\" : \"https://app-weather-o0lf.onrender.com/public/\"\r\n}",
+					"raw": "{\r\n    \"name\" : \"check mine nodejs server\",\r\n    \"path\" : \"https://app-weather-o0lf.onrender.com/public/\",\r\n    \"type\" : 0\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -71,13 +71,77 @@
 			"response": []
 		},
 		{
-			"name": "create disabled server",
+			"name": "create disabled http server",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"check disabled server\",\r\n    \"path\" : \"http://evgbuasdkar.com/\"\r\n}",
+					"raw": "{\r\n    \"name\" : \"check disabled server\",\r\n    \"path\" : \"http://evgbuasdkar.com/\",\r\n    \"type\" : 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/web-server/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"web-server",
+						"post"
+					]
+				},
+				"description": "Valid post request creating of element with required data"
+			},
+			"response": []
+		},
+		{
+			"name": "create ftp server",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"check ftp server\",\r\n    \"path\" : \"ftp.dlptest.com\",\r\n    \"type\" : 1,\r\n    \"port\" : 21,\r\n    \"username\" : \"dlpuser\",\r\n    \"password\" : \"rNrKYTX9g7z3RgJRmxWuGHbeu\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/web-server/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"web-server",
+						"post"
+					]
+				},
+				"description": "Valid post request creating of element with required data"
+			},
+			"response": []
+		},
+		{
+			"name": "create desiabled ftp server",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"check ftp server\",\r\n    \"path\" : \"ftp.dlptestwrong.com\",\r\n    \"type\" : 1,\r\n    \"port\" : 21,\r\n    \"username\" : \"dlpuser\",\r\n    \"password\" : \"rNrKYTX9g7z3RgJRmxWuGHbeu\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
