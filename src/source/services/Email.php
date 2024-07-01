@@ -39,17 +39,24 @@ class Email
     /**
      * Sends an email.
      *
-     * @param string $to The recipient of the email.
+     * @param string|array $to The recipient of the email.
      * @param string $subject The subject of the email.
      * @param string $content The content of the email.
      * @return bool Returns true if the email was sent successfully, false otherwise.
      * @throws Exception
      */
-    public function sendEmail(string $to, string $subject, string $content): bool
+    public function sendEmail(string | array $to, string $subject, string $content): bool
     {
         try {
             $this->mail->setFrom($this->mail->Username);
-            $this->mail->addAddress($to);
+            if (is_array($to)) {
+                foreach ($to as $recipient) {
+                    $this->mail->addAddress($recipient);
+                }
+            }
+            else{
+                $this->mail->addAddress($to);
+            }
             $this->mail->isHTML(true);
             $this->mail->Subject = $subject;
             $this->mail->Body = $content;

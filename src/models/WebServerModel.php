@@ -40,10 +40,17 @@ class WebServerModel extends \app\source\model\AbstractModel
     #[TypeAttribute(type: 'string')]
     public string|null $status_message;
 
-    
+    #[FieldAttribute]
+    #[TypeAttribute(type: 'integer')]
+    public int|null $type;
 
-    
-    
+    #[FieldAttribute]
+    #[TypeAttribute(type: 'string')]
+    public string|null $username;
+
+    #[FieldAttribute]
+    #[TypeAttribute(type: 'string')]
+    public string|null $password;
     
 } 
 
