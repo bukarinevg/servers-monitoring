@@ -71,6 +71,38 @@
 			"response": []
 		},
 		{
+			"name": "create disabled http server",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"check disabled server\",\r\n    \"path\" : \"http://evgbuasdkar.com/\",\r\n    \"type\" : 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/web-server/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"web-server",
+						"post"
+					]
+				},
+				"description": "Valid post request creating of element with required data"
+			},
+			"response": []
+		},
+		{
 			"name": "create ftp server",
 			"request": {
 				"method": "POST",
@@ -110,38 +142,6 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"name\" : \"check ftp server\",\r\n    \"path\" : \"ftp.dlptestwrong.com\",\r\n    \"type\" : 1,\r\n    \"port\" : 21,\r\n    \"username\" : \"dlpuser\",\r\n    \"password\" : \"rNrKYTX9g7z3RgJRmxWuGHbeu\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/web-server/post",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"web-server",
-						"post"
-					]
-				},
-				"description": "Valid post request creating of element with required data"
-			},
-			"response": []
-		},
-		{
-			"name": "create disabled http server",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"check disabled server\",\r\n    \"path\" : \"http://evgbuasdkar.com/\",\r\n    \"type\" : 0\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
