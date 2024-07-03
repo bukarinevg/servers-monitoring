@@ -27,11 +27,56 @@ class UrlRouting  extends Url{
     /**
      * Gets the controller and method from the URL.
      *
-     * @return array An array containing the controller and method.
+     * @return Route An array containing the controller and method.
      */
-    public function getControllerFullAddress(): array {
-        $url = $this->getPath();
+    public function getRouteDetails(): Route {
+        $path = $this->getPath();
+        $urlNamesArray = $this->parsePathToNamesArray($path);  
+        $routeElementsWithoutParam = 2;
+        $routeElementsWithParam = 3;
         
+        $route = $this->findRoute($urlNamesArray, $routeElementsWithoutParam);
+        if($route){
+            return $route;
+        }
+        if($route = $this->findRoute($urlNamesArray, $routeElementsWithParam)){
+            return $route;
+        }
+
+        throw new NotFoundException('Controller or method not found');
+    }
+
+    private function findRoute(array $urlNamesArray, int $routeElements ) : Route | bool{
+        if(count($urlNamesArray) < $routeElements){
+            throw new NotFoundException('Controller or method not found');
+        }
+
+        $nameSpaceElementsArray = array_slice($urlNamesArray, 0, $routeElements);
+        $nameSpace = $this->buildNameSpace($nameSpaceElementsArray);
+        
+        $routeArray = array_slice($urlNamesArray, $routeElements);
+
+        $controller = $this->getControllerName($routeArray[0], $nameSpace);
+        $method = $this->getMethodName($routeArray[1]);
+        $param = isset($routeArray[2]) ? $routeArray[2] : null;
+
+        $route = new Route($controller, $method, $param);
+        
+        if($route->validate()){
+             return $route;
+        }else{
+            return false;
+        }
+        
+    }
+
+    /**
+     * Parses the URL path.
+     *
+     * @param string $url The URL.
+     * @return array The parsed URL.
+     */
+    private function parsePathToNamesArray(string $url): array {
         if(strpos($url, '-') ){
             $trimmedUrl = ltrim($url, '-');
             $parts = explode('-', $trimmedUrl);
@@ -43,102 +88,25 @@ class UrlRouting  extends Url{
 
         $url = rtrim($url, '/');
         $url = explode('/', ltrim( $url, '/'));
-
-        $length = count($url);
-        if($length == 0){
-            throw new NotFoundException('No controller found');
-        }
-        elseif($length == 1){
-           throw new NotFoundException('No method found');
-        }
-
-        $path = '';
-
-        for($i = 0; $i < $length -2 ; $i++){
-            $path .= ucfirst($url[$i]) . '\\';  
-        }
-
-        $controller =ucfirst($url[$length - 2]);
-        $controller = $this->getControllerName($path.$controller);
-        $method = ucfirst($url[$length - 1]);
-        $method =  $this->getMethodName($method);
-
-        if($this->checkController($controller, $method)){
-            $reflector = new \ReflectionMethod($controller, $method);
-            $params = $reflector->getParameters();
-            if(count($params) == 0){
-                // echo 'contollers exists and method exists no params required'; 
-                return [ 
-                    'controller' => $controller, 
-                    'method'     => $method,
-                    'param'     => null
-                ];
-            }
-            
-        }
-
-        $path = '';
-
-        if($length < 3){
-            throw new NotFoundException('Wrong URL format');
-        }
-
-        for($i = 0; $i < $length -3 ; $i++){
-            $path .= ucfirst($url[$i]) . '\\';  
-        }
-        
-        $controller =ucfirst($url[$length - 3]);
-        $controller = $this->getControllerName($path.$controller);
-        $method = ucfirst($url[$length - 2]);
-        $method =  $this->getMethodName($method);
-        $param = $url[$length - 1];
-
-        if(!is_numeric($param)){
-            throw new BadRequestException('Parameter should be a number');
-        }
-
-        if($this->checkController($controller, $method)){
-            $reflector = new \ReflectionMethod($controller, $method);
-            $params = $reflector->getParameters();
-            if(count($params) == 1){
-                // echo 'contollers exists and method exists params required'; 
-                return [ 
-                    'controller' => $controller, 
-                    'method'     => $method,
-                    'param'     => $param
-                ];
-            }
-            else{
-                throw new NotFoundException('Parameter not found');
-            }
-        }
-
-        throw new NotFoundException('Controller or method not found');
-
-
-
-    }
-    /**
-     * Gets the controller name from the URL.
-     *
-     * @param string $url The URL.
-     * @return string The controller name.
-     */
-    private function getControllerName($url = null): string {
-        return self::CONTROLLER_NAMESPACE . ( $url ). 'Controller';
+        return $url;
     }
 
-    /**
-     * Gets the method name from the URL.
-     *
-     * @param string $url The URL.
-     * @return string The method name.
-     */
+    private function getControllerName(string $controllerName, string $nameSpace): string {
+        $controllerName = ucfirst($controllerName);
+        $controllerName = self::CONTROLLER_NAMESPACE . $nameSpace . $controllerName . 'Controller';
+        return $controllerName;
+    }
+
     private function getMethodName($url = null): string {
         return 'action' . ( ucfirst($url) );
     }
 
-    private function checkController($controller, $method): bool {
-        return class_exists($controller) && method_exists($controller, $method);
+    private function buildNameSpace(array $urlNamesArray): string {
+        $nameSpace = '';
+        for($i = 0; $i <  count($urlNamesArray); $i++){
+            $nameSpace .= ucfirst($urlNamesArray[$i]) . '\\';  
+        }
+        return $nameSpace;
+
     }
 }

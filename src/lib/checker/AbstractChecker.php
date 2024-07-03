@@ -12,7 +12,7 @@ use app\source\services\Email;
 use Checker;
 
 
-abstract class AbstractChecker implements InterfaceChecker {
+abstract class AbstractChecker implements CheckerInterface {
     protected Email $email;
     protected array $users = [];
     protected array $servers = [];
@@ -26,15 +26,11 @@ abstract class AbstractChecker implements InterfaceChecker {
     public function handleResults(array $results): void {
         foreach ($results as $result) {
             if($result instanceof ResultChecker){
-                $work = new WebServerWorkModel();
-                $work->web_server_id = $result->server_id;
-                $work->status = $result->status;
-                $work->status_code = $result->status_code;
-                $work->message = substr($result->message, 0, 255);
-                $work->save();
-                $time = date('H:i:s d-m-Y', $work->created_at);
+                
+                $time = $result->saveWork();
 
                 $server = WebServerModel::find($result->server_id);
+
                 echo "Server($server->name) is $server->status_message\n";
                 if ($result->status == $server->status && $server->count == ServerChecksAmountEnum::getValue($result->status)) {
                     continue;
