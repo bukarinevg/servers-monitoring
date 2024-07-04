@@ -5,15 +5,15 @@ use app\models\WebServerModel;
 use app\source\db\DataBase;
 use app\enums\ServerTypeEnum;
 use app\source\services\Email;
-use app\lib\checker\InterfaceChecker;
+use app\lib\checker\CheckerInterface;
 use app\lib\checker\FtpServerChecker;
 use app\lib\checker\HttpServerChecker;
 use app\lib\checker\SshServerChecker;
 
-class ServerChecker {
-    private ?InterfaceChecker $checker;
+class ServerCheckerStategy {
+    private ?CheckerInterface $checker;
 
-    public function setChecker(InterfaceChecker $checker): void {
+    public function setChecker(CheckerInterface $checker): void {
         $this->checker = $checker;
     }
 
@@ -25,7 +25,7 @@ class ServerChecker {
 
 
 class ServerCheckerFactory {
-    public static function createChecker(string $type, array $users = []): InterfaceChecker {
+    public static function createChecker(string $type, array $users = []): CheckerInterface {
         switch ($type) {
             case ServerTypeEnum::HTTP_SERVER->value:
                 $servers = WebServerModel::findBy(['type' => $type]);
@@ -54,7 +54,7 @@ DataBase::getInstance($config['components']['db']);
 Email::getInstance($config['components']['email']);
 
 
-$serverChecker = new ServerChecker();
+$serverChecker = new ServerCheckerStategy();
 
 $httpChecker = ServerCheckerFactory::createChecker(ServerTypeEnum::HTTP_SERVER->value, $config['admins'] ?? []);
 $serverChecker->setChecker($httpChecker);

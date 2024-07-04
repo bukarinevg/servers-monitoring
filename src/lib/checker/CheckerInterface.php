@@ -2,7 +2,7 @@
 
 namespace app\lib\checker;
 
-interface InterfaceChecker {
+interface CheckerInterface {
     function checkServers(): void;
     function handleResults(array $results): void;
 }

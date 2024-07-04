@@ -6,6 +6,9 @@ use app\source\db\DataBase;
 use app\source\http\RequestHandler;
 use app\source\http\UrlRouting;
 use app\source\http\ResponseError;
+use app\source\http\ResponseHandlerFactory;
+use app\source\http\ResponseStrategy;
+use app\source\http\Route;
 use app\source\SingletonTrait;
 use BadMethodCallException;
 use Exception;
@@ -22,59 +25,27 @@ readonly class App
      * @var mixed $request The request object.
      */
     private RequestHandler $request;
-    
-
 
     public function __construct(#[\SensitiveParameter] private  array $config){
         DataBase::getInstance($this->config['components']['db']);
     }
 
-
     public function run()
     {
+        header('Content-Type: application/json');
+        ob_start();
         try {
-            header('Content-Type: application/json');
             $this->setRequest(new RequestHandler());
+            $requestMethod = $this->request->getRequest()->getMethod();
 
-            $controllerDetails = (new UrlRouting())->getControllerFullAddress();
+            $route = (new UrlRouting())->getRouteDetails();
             
-            $controllerAction = $this->getControllerAction( 
-                $controllerDetails['controller'], 
-                $controllerDetails['method'] 
-            ); 
-
-
-            ob_start();
-
-            $result = $controllerAction($controllerDetails['param']);
-
-
-            switch ($this->request->getRequest()->getMethod()) {
-                case 'GET':
-                    http_response_code(200);
-                    break;
-                case 'POST':
-                    http_response_code(201);
-                    $path = explode('/', $_SERVER['REQUEST_URI']);
-                    array_slice($path, 0, count($path) - 2);
-                    $location = implode('/', $path);
-                    $location = $location . '/' . $result;
-                    
-                    header("Location:  $location");
-                    break;
-                case 'PUT':
-                    http_response_code(200);
-                    break;
-                case 'DELETE':
-                    http_response_code(204);
-                    break;
-                default:
-                    ResponseError::setResponse('405 Method Not Allowed', 'Method not allowed');
-                    break;
-            }
-
-            ob_end_flush();
+            $routeAction = $this->getRouteAction( $route->controller,$route->method );
+            $result = $routeAction($route->param);    
             
+            $responseHandler  = ResponseHandlerFactory::createHandler($requestMethod, $result);
+            $handlingStrategy = new ResponseStrategy($responseHandler);
+            $handlingStrategy->handle();          
     
         } catch (NotFoundException $th) {
             ResponseError::setResponse('404 Not Found', $th->getMessage());
@@ -84,21 +55,14 @@ readonly class App
         }
         catch(PDOException $th){
             ResponseError::setResponse('500 Internal Server ResponseError', $th->getMessage());
-            exit();
         }
         catch(BadRequestException $th){
             ResponseError::setResponse('400 Bad Request', $th->getMessage());
-            exit();
         }
         catch(\Throwable $th){
             ResponseError::setResponse('500 Internal Server ResponseError', $th->getMessage());
-            exit();
         }
-        finally{
-            exit();
-        }
-      
-
+        ob_end_flush();
     }
 
     /**
@@ -106,7 +70,7 @@ readonly class App
      *
      * @param array $route An array containing the controller and method.
      */
-    public function getControllerAction(string $controller, string $method) : callable
+    private function getRouteAction(string $controller, string $method) : callable
     {
 
         $controllerInstance = new $controller($this);
@@ -116,12 +80,9 @@ readonly class App
             method: $method
         );
 
-
         return function($param = null) use ($controllerInstance, $method) {
             return $controllerInstance->$method($param);
-        };;
-
-            
+        };
     }
 
     /**
