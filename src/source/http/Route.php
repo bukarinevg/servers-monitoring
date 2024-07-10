@@ -3,7 +3,7 @@
 namespace app\source\http;
 
 use app\source\http\Url;
-use League\Container\Exception\NotFoundException;
+use app\source\exceptions\NotFoundException;
 
 
 /**
@@ -18,11 +18,9 @@ class Route{
 
     public function validate() : bool {
         if(!class_exists($this->controller)){
-            echo $this->controller;
             throw new NotFoundException('Controller not found');
         }
         if(!method_exists($this->controller, $this->method)){
-            echo $this->method;
             throw new NotFoundException('Method not found');
         }
         if($this->isParam() && $this->param === null){

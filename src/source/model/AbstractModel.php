@@ -8,9 +8,9 @@ use app\source\attribute\validation\TypeAttribute;
 use app\source\attribute\AttributeHelper;
 use app\source\http\RequestHandler;
 use Exception;
-use League\Container\Exception\NotFoundException;
+use app\source\exceptions\NotFoundException;
 use PDOException;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use app\source\exceptions\BadRequestException;
 
 /**
  * This is an abstract class that serves as the base for all models.
@@ -195,9 +195,7 @@ abstract class AbstractModel {
         foreach ($this->data as $key => $value) {
             $this->$key = $value;
         }
-
-        // echo 'Data is valid';
-
+        
         return null;
     }
 

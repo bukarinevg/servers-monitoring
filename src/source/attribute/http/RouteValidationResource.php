@@ -2,7 +2,7 @@
 namespace app\source\attribute\http;
 
 use BadMethodCallException;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use app\source\exceptions\BadRequestException;
 
 class RouteValidationResource{
     public static function validateRoute(

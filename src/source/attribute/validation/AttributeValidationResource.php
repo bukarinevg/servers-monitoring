@@ -2,7 +2,7 @@
 namespace app\source\attribute\validation;
 
 use app\source\attribute\AttributeHelper;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use app\source\exceptions\BadRequestException;
 
 /**
  * Class AttributeValidationResource
