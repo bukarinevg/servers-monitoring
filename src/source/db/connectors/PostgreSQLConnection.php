@@ -36,7 +36,6 @@ class PostgreSQLConnection  extends AbstractDBConnection implements DBConnection
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $this->connection;
         } catch (PDOException $e) {
-            echo 'Connection Error: ' . $e->getMessage();
             throw $e;
         }
 

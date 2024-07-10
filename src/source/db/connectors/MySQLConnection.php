@@ -33,7 +33,6 @@ class MySQLConnection  extends AbstractDBConnection implements DBConnectionInter
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $connection;
         } catch (PDOException $e) {
-            echo 'Connection Error: ' . $e->getMessage();
             throw $e;
         }
     }

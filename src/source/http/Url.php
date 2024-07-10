@@ -1,26 +1,23 @@
 <?php 
 namespace app\source\http;
 
-/**
- * Represents a URL.
- */
 class Url {
     /**
      * @var string $protocol The protocol of the URL.
      */
-    protected $protocol;
+    protected string $protocol;
     /**
      * @var string $host The host of the URL.
      */
-    protected $host;
+    protected string  $host;
     /**
      * @var string $path The path of the URL.
      */
-    protected $path;
+    protected string $path;
     /**
      * @var array $query The query of the URL.
      */
-    protected $query;
+    protected array $query;
 
     /**
      * Constructor for the Url class.

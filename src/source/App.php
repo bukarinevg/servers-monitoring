@@ -10,8 +10,10 @@ use app\source\http\ResponseHandlerFactory;
 use app\source\http\ResponseStrategy;
 use app\source\SingletonTrait;
 use BadMethodCallException;
-use League\Container\Exception\NotFoundException;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use app\source\exceptions\NotFoundException;
+use app\source\exceptions\BadRequestException;
+
+
 use PDOException;
 
 
