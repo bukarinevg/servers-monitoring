@@ -13,24 +13,10 @@ use Attribute;
 #[Attribute]
 class RouteAttribute
 {
-    /**
-     * The route param.
-     *
-     * @var string
-     */
-    public string $param;
 
-    /**
-     * The route method.
-     *
-     * @var string
-     */
-    public string $method;
 
-    public function __construct(string $param, string $method)
+    public function __construct(private string $method, private ?string $param = null)
     {
-        $this->param = $param;
-        $this->method = $method;
     }
 
     public function validate() : bool

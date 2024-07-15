@@ -82,7 +82,7 @@ class WebServerController extends \app\source\controller\AbstractController
      *
      * @return void
      */
-    #[RouteAttribute( method: 'POST')]
+    #[RouteAttribute(method: 'POST')]
     public function actionPost(): int 
     {
         $webServerModel = new WebServerModel();

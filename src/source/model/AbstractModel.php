@@ -165,6 +165,9 @@ abstract class AbstractModel {
     public static function findBy(array $condition): array {
         $model = new static();
         $result = $model->db->select($model->table, ['*'], $condition);
+        if(! $result){
+            throw new NotFoundException('Record not found');
+        }
         $models = [];
         foreach ($result as $row) {
             $model = new static();
