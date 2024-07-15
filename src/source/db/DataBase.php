@@ -125,6 +125,15 @@ class DataBase  {
         return $query->execute() ? true : throw new \PDOException("Error deleting data from the database.");
     }
 
+
+    public function beginTransaction(): void {
+        $this->db->beginTransaction();
+    }
+
+    public function commitTransaction(): void {
+        $this->db->commit();
+    }
+
     
 
 }

@@ -22,8 +22,6 @@ class ServerCheckerStategy {
     }
 }
 
-
-
 class ServerCheckerFactory {
     public static function createChecker(string $type, array $users = []): CheckerInterface {
         switch ($type) {
@@ -50,7 +48,7 @@ class ServerCheckerFactory {
 }
 
 $config = require_once 'config/config.php';
-DataBase::getInstance($config['components']['db']);
+$db = DataBase::getInstance($config['components']['db']);
 Email::getInstance($config['components']['email']);
 
 

@@ -9,8 +9,6 @@ use app\enums\ServerStatusEnum;
 use app\enums\ServerMessageEnum;
 use app\enums\ServerChecksAmountEnum;
 use app\source\services\Email;
-use Checker;
-
 
 abstract class AbstractChecker implements CheckerInterface {
     protected Email $email;
@@ -26,12 +24,8 @@ abstract class AbstractChecker implements CheckerInterface {
     public function handleResults(array $results): void {
         foreach ($results as $result) {
             if($result instanceof ResultChecker){
-                
                 $time = $result->saveWork();
-
                 $server = WebServerModel::find($result->server_id);
-
-                echo "Server($server->name) is $server->status_message\n";
                 if ($result->status == $server->status && $server->count == ServerChecksAmountEnum::getValue($result->status)) {
                     continue;
                 } elseif ($result->status !== $server->status) {
