@@ -15,7 +15,7 @@ class WebServerController extends \app\source\controller\AbstractController
      * @param int $id
      * @return void
      */
-    #[RouteAttribute(path: '/get', method: 'GET')]
+    #[RouteAttribute(param: 'int', method: 'GET')]
     public function actionGet(int $id): void
     {
         $webServerModel = WebServerModel::find($id);
@@ -43,7 +43,7 @@ class WebServerController extends \app\source\controller\AbstractController
      *
      * @return void
      */
-    #[RouteAttribute(path: '/get-all', method: 'GET')]
+    #[RouteAttribute(method: 'GET')]
     public function actionGetAll(): void
     {
         $webServerModel = WebServerModel::findAll();
@@ -63,7 +63,7 @@ class WebServerController extends \app\source\controller\AbstractController
      * @param int $id
      * @return void
      */
-    #[RouteAttribute(path: '/get-history', method: 'GET')]
+    #[RouteAttribute(param: 'int' , method: 'GET')]
     public function actionGetHistory(int $id): void
     {
         $webServerWorks = WebServerWorkModel::findBy(['web_server_id' => $id]);
@@ -82,7 +82,7 @@ class WebServerController extends \app\source\controller\AbstractController
      *
      * @return void
      */
-    #[RouteAttribute(path: '/post', method: 'POST')]
+    #[RouteAttribute( method: 'POST')]
     public function actionPost(): int 
     {
         $webServerModel = new WebServerModel();
@@ -98,7 +98,7 @@ class WebServerController extends \app\source\controller\AbstractController
      * @param int $id
      * @return void
      */
-    #[RouteAttribute(path: '/put', method: 'PUT')]
+    #[RouteAttribute(param: 'int', method: 'PUT')]
     public function actionPut(int $id): void
     {
         $webServerModel = WebServerModel::find($id);
@@ -114,7 +114,7 @@ class WebServerController extends \app\source\controller\AbstractController
      * @param int $id
      * @return void
      */
-    #[RouteAttribute(path: '/delete', method: 'DELETE')]
+    #[RouteAttribute(param: 'int', method: 'DELETE')]
     public function actionDelete(int $id): void
     {
         $webServerModel = WebServerModel::find($id);

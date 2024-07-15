@@ -17,7 +17,7 @@ class Url {
     /**
      * @var array $query The query of the URL.
      */
-    protected array $query;
+    protected array|null $query;
 
     /**
      * Constructor for the Url class.

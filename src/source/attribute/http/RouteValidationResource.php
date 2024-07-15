@@ -7,7 +7,8 @@ use app\source\exceptions\BadRequestException;
 class RouteValidationResource{
     public static function validateRoute(
         string $class,
-        string $method
+        string $method,
+        string | null $param = null
     ): bool | BadMethodCallException
     {
         $reflector = new \ReflectionMethod($class, $method);

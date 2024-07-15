@@ -2,14 +2,12 @@
 
 namespace app\source\http;
 
-use app\source\http\Url;
 use app\source\exceptions\NotFoundException;
 
 
 /**
- * Class UrlRouting
+ * Class Route
  * 
- * This class extends the Url class and is responsible for handling URL routing.
  */
 
 class Route{

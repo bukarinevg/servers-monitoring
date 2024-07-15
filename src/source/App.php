@@ -40,7 +40,7 @@ readonly class App
 
             $route = (new UrlRouting())->getRouteDetails();
             
-            $routeAction = $this->getRouteAction( $route->controller,$route->method );
+            $routeAction = $this->getRouteAction( $route->controller,$route->method, $route->param );
             $result = $routeAction($route->param);    
             
             $responseHandler  = ResponseHandlerFactory::createHandler($requestMethod, $result);
@@ -70,14 +70,15 @@ readonly class App
      *
      * @param array $route An array containing the controller and method.
      */
-    private function getRouteAction(string $controller, string $method) : callable
+    private function getRouteAction(string $controller, string $method, string| null $param) : callable
     {
 
         $controllerInstance = new $controller($this);
         
         RouteValidationResource::validateRoute(
             class: $controllerInstance::class, 
-            method: $method
+            method: $method,
+            param: $param
         );
 
         return function($param = null) use ($controllerInstance, $method) {
