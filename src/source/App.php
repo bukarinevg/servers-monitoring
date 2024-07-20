@@ -27,9 +27,10 @@ readonly class App
     private RequestHandler $request;
 
     public function __construct(#[\SensitiveParameter] private  array $config){
+    
         DataBase::getInstance($this->config['components']['db']);
     }
-
+    
     public function run()
     {
         header('Content-Type: application/json');
