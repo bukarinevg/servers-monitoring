@@ -18,6 +18,7 @@ class DataBase  {
 
     use QueryBuilderTrait {
         select as traitSelect;
+        selectWithLimit as traitSelectWithLimit;
 		insert as traitInsert;
         update as traitUpdate;
         delete as traitDelete;
@@ -79,6 +80,18 @@ class DataBase  {
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Select limit data from the specified table based on the given columns and condition.
+    */
+
+    public function selectWithLimit(string $table, array | string $columns, array $condition = [], ?int $limit = null, ?int $offset = null): array {
+        $query = $this->traitSelectWithLimit($table , $columns, $condition, $limit, $offset);
+        $query = $this->db->prepare($query);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     
     /**
      * Inserts data into the specified table.

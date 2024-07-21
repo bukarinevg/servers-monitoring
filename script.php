@@ -10,35 +10,38 @@ use app\lib\checker\FtpServerChecker;
 use app\lib\checker\HttpServerChecker;
 use app\lib\checker\SshServerChecker;
 
-class ServerCheckerStategy {
+class ServerCheckerStrategy {
     private ?CheckerInterface $checker;
 
     public function setChecker(CheckerInterface $checker): void {
         $this->checker = $checker;
     }
 
-    public function checkServers(): void {
-        $this->checker->checkServers();
+    public function checkServers(int $type): void {
+
+        $ofset = 0;
+        $limit = 100;
+        while ($servers = WebServerModel::findByWithLimit(['type' => $type], $limit, $ofset)) {
+            $this->checker->checkServers($servers);
+            $ofset += $limit;
+        }
     }
 }
 
 class ServerCheckerFactory {
-    public static function createChecker(string $type, array $users = []): CheckerInterface {
+    public static function createChecker(string $type, array $users = []): CheckerInterface | null {
         switch ($type) {
             case ServerTypeEnum::HTTP_SERVER->value:
-                $servers = WebServerModel::findBy(['type' => $type]);
                 return new HttpServerChecker(
-                    servers :$servers, 
+                    // servers :$servers, 
                     users: $users);
             case ServerTypeEnum::FTP_SERVER->value:
-                $servers = WebServerModel::findBy(['type' => $type]);
                 return new FtpServerChecker(
-                    servers: $servers, 
+                    // servers: $servers, 
                     users: $users);
             case ServerTypeEnum::SSH_SERVER->value:
-                $servers = WebServerModel::findBy(['type' => $type]);
                 return new SshServerChecker(
-                    servers: $servers, 
+                    // servers: $servers, 
                     users: $users
                 );
             default:
@@ -50,18 +53,17 @@ class ServerCheckerFactory {
 $config = require_once 'config/config.php';
 $db = DataBase::getInstance($config['components']['db']);
 Email::getInstance($config['components']['email']);
+$serverTypes = [
+    ServerTypeEnum::HTTP_SERVER->value,
+    ServerTypeEnum::FTP_SERVER->value,
+    ServerTypeEnum::SSH_SERVER->value,
+];
 
-
-$serverChecker = new ServerCheckerStategy();
-
-$httpChecker = ServerCheckerFactory::createChecker(ServerTypeEnum::HTTP_SERVER->value, $config['admins'] ?? []);
-$serverChecker->setChecker($httpChecker);
-$serverChecker->checkServers();
-
-$ftpChecker = ServerCheckerFactory::createChecker(ServerTypeEnum::FTP_SERVER->value, $config['admins'] ?? []);
-$serverChecker->setChecker($ftpChecker);
-$serverChecker->checkServers();
-
-$sshChecker = ServerCheckerFactory::createChecker(ServerTypeEnum::SSH_SERVER->value, $config['admins'] ?? []);
-$serverChecker->setChecker($sshChecker);
-$serverChecker->checkServers();
+$serverChecker = new ServerCheckerStrategy();
+foreach ($serverTypes as $serverType) {
+    $checker = ServerCheckerFactory::createChecker($serverType, $config['admins'] ?? []);
+    if ($checker) {
+        $serverChecker->setChecker($checker);
+        $serverChecker->checkServers($serverType);
+    }
+}

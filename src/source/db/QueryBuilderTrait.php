@@ -37,18 +37,45 @@ trait QueryBuilderTrait {
      * @return string The SQL query.
      */
     public function select(string $table, array  $columns, array $condition = []): string {
-        
         $conditionString = $this->buildCondition($condition);
-
         $columnStr = implode(', ', $columns);
         $columnStr = rtrim($columnStr, ', ');
-
-
         return 
             'SELECT ' .  $columnStr . 
             ' FROM ' . $table . 
             $conditionString;
     }
+
+    /**
+     * Extends the select method to include LIMIT and OFFSET functionality.
+     *
+     * @param string $table The name of the table.
+     * @param array $columns The columns to select.
+     * @param array $condition The condition for selection.
+     * @param int|null $limit The maximum number of records to return.
+     * @param int|null $offset The offset of the first record to return.
+     * @return string The SQL query.
+     */
+    public function selectWithLimit(string $table, array $columns, array $condition = [], ?int $limit = null, ?int $offset = null): string {
+        $conditionString = $this->buildCondition($condition);
+        $columnStr = implode(', ', $columns);
+        $columnStr = rtrim($columnStr, ', ');
+        $query = 
+            'SELECT ' .  $columnStr . 
+            ' FROM ' . $table . 
+            $conditionString;
+
+        if ($limit !== null) {
+            $query .= ' LIMIT ' . $limit;
+            if ($offset !== null) {
+                $query .= ' OFFSET ' . $offset;
+            }
+        }
+
+        return $query;
+    }
+
+
 
 
     /**

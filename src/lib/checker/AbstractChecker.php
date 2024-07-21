@@ -15,6 +15,8 @@ abstract class AbstractChecker implements CheckerInterface {
     protected array $users = [];
     protected array $servers = [];
 
+    public $ofset = 0;
+
     public function __construct($users = [], $servers = []) {
         $this->email = Email::getInstance();
         $this->servers = $servers;

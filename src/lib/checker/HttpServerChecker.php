@@ -23,25 +23,23 @@ class HttpServerChecker extends AbstractChecker {
     }
 
 
-    public function checkServers(): void {
+    public function checkServers(array $servers): void {
         $promises = [];
-        $webServersSlices = array_chunk($this->servers, 100); 
 
-        foreach ($webServersSlices as $webServersSlice) {
-            foreach ($webServersSlice as $server) {
-                if ($server instanceof WebServerModel) {
-                    $uri = $server->path;
-                    $promises[$server->id] = $this->client->getAsync($uri)->then(
-                        function ($response) use ($server) {
-                            return $this->handleSuccess($response, $server->id);
-                        },
-                        function (Throwable $e) use ($server) {
-                            return $this->handleFailure($e, $server->id);
-                        }
-                    );
-                }
+        foreach ($servers as $server) {
+            if ($server instanceof WebServerModel) {
+                $uri = $server->path;
+                $promises[$server->id] = $this->client->getAsync($uri)->then(
+                    function ($response) use ($server) {
+                        return $this->handleSuccess($response, $server->id);
+                    },
+                    function (Throwable $e) use ($server) {
+                        return $this->handleFailure($e, $server->id);
+                    }
+                );
             }
         }
+        
         $results = Utils::all($promises)->wait();
         $this->handleResults($results);
     }

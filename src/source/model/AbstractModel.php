@@ -12,10 +12,7 @@ use app\source\db\ActiveRecord;
 /**
  * This is an abstract class that serves as the base for all models.
  */
- class AbstractModel extends ActiveRecord{
-    
-
-
+abstract class AbstractModel extends ActiveRecord{
     #[FieldAttribute]
     #[TypeAttribute(type: 'integer')]
     public int|null $created_at;

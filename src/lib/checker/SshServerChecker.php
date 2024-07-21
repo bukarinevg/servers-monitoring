@@ -7,9 +7,9 @@ use app\models\WebServerModel;
 use phpseclib3\Net\SSH2;
 
 class SshServerChecker extends AbstractChecker {
-    public function checkServers(): void {
+    public function checkServers(array $servers): void {
         $results = [];
-        foreach ($this->servers as $server) {
+        foreach ($servers as $server) {
             if ($server instanceof WebServerModel) {
                 try{
                     $ssh = new SSH2($server->path, $server->port?? 22, 60);

@@ -6,9 +6,9 @@ use app\enums\ServerStatusEnum;
 use app\models\WebServerModel;
 
 class FtpServerChecker extends AbstractChecker {
-    public function checkServers(): void {
+    public function checkServers(array $servers): void {
         $results = [];
-        foreach ($this->servers as $server) {
+        foreach ($servers as $server) {
            if($server instanceof WebServerModel) {
             try{
                 $connection = ftp_connect($server->path, $server->port?? 21, 60);

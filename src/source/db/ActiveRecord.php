@@ -10,7 +10,7 @@ use app\source\attribute\validation\TypeAttribute;
 use app\source\exceptions\NotFoundException;
 
 
-class ActiveRecord{
+abstract class ActiveRecord{
 
     #[FieldAttribute]
     #[TypeAttribute(type: 'integer')]
@@ -94,9 +94,9 @@ class ActiveRecord{
      * Find a record by its ID.
      *
      * @param int $id The ID of the record to find.
-     * @return ActiveRecord The model object.
+     * @return static The model object.
      */
-    public static function find(int $id): self {
+    public static function find(int $id): static {
         $model = new static();
         $result = $model->db->select($model->table, ['*'], ['id' => $id]);
         if(! $result){
@@ -138,9 +138,30 @@ class ActiveRecord{
     public static function findBy(array $condition): array {
         $model = new static();
         $result = $model->db->select($model->table, ['*'], $condition);
-        if(! $result){
-            throw new NotFoundException('Record not found');
+        $models = [];
+        foreach ($result as $row) {
+            $model = new static();
+            foreach ($row as $key => $value) {
+                $model->$key = $value;
+            }
+            $models[] = $model;
         }
+        return $models;
+    }
+
+
+    /**
+     * Find records by a condition with limit and offset.
+     *
+     * @param array $condition The condition to find records by.
+     * @param int $limit The maximum number of records to return.
+     * @param int $offset The offset of the first record to return.
+     * @return array The array of model objects.
+     */
+
+    public static function findByWithLimit(array $condition, int $limit, int $offset): array {
+        $model = new static();
+        $result = $model->db->selectWithLimit($model->table, ['*'], $condition, $limit, $offset);
         $models = [];
         foreach ($result as $row) {
             $model = new static();
